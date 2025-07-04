@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generador de Macro 'MERCANCIA DE 7'</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1 { text-align: center; color: #333; }
+    textarea { width: 100%; padding: 10px; margin-bottom: 1rem; font-family: monospace; font-size: 14px; }
+    #listInput { height: 150px; }
+    #output { white-space: pre-wrap; background: #fff; padding: 1rem; border: 1px solid #ccc; min-height: 300px; overflow: auto; max-height: 600px; }
+    button { padding: 10px 20px; font-size: 16px; margin-right: 0.5rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Macro 'MERCANCIA DE 7'</h1>
+  <p>Pega tu listado de valores (cada línea en formato):</p>
+  <pre>Mxxxxxxx PAR</pre>
+  <textarea id="listInput" placeholder="M652540 7\nM652545 7"></textarea>
+  <button onclick="generateMacro()">GENERAR MACRO</button>
+  <button onclick="copyMacro()">COPIAR MACRO</button>
+  <button onclick="clearOutput()">LIMPIAR PREVISUALIZACIÓN</button>
+  <h2>Macro Generado:</h2>
+  <pre id="output"></pre>
+
+  <script>
+    function generateMacro() {
+      const rawLines = document.getElementById('listInput').value.trim().split(/\r?\n/).filter(l => l);
+      if (rawLines.length === 0) {
+        alert("¡Debes ingresar datos!");
+        return;
+      }
+
+      let macro = `<HAScript name="7. MERCANCIA DE 7" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Mar 6, 2025 9:24:10 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n\n`;
+
+      let blockCounter = 1;
+      const valorFijo = "25101503";
+
+      rawLines.forEach((line, idx) => {
+        const [codigo, par] = line.trim().split(/\s+/);
+        if (!codigo || !par) {
+          alert(`La línea ${idx+1} no tiene todos los valores requeridos.`);
+          return;
+        }
+
+        const texto = "XUN";
+        const importe = par === "6" ? "9,510.00" : par === "7" ? "11,095.00" : "12,680.00";
+        const numero = "8704319999";
+        const codfinal = "03";
+
+        macro += `    <screen name="Screen${blockCounter}" entryscreen="true" exitscreen="false" transient="false">\n`;
+        macro += `        <description >\n`;
+        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
+        macro += `        </description>\n`;
+        macro += `        <actions>\n`;
+        macro += `            <input value="${codigo}" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+        macro += `            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+        macro += `        </actions>\n`;
+        macro += `        <nextscreens timeout="0" >\n`;
+        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
+        macro += `        </nextscreens>\n`;
+        macro += `    </screen>\n\n`;
+        blockCounter++;
+
+        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="false" transient="false">\n`;
+        macro += `        <description >\n`;
+        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
+        macro += `            <numfields number="76" optional="true" invertmatch="false" />\n`;
+        macro += `            <numinputfields number="8" optional="true" invertmatch="false" />\n`;
+        macro += `        </description>\n`;
+        macro += `        <actions>\n`;
+        macro += `            <input value="M[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+        macro += `        </actions>\n`;
+        macro += `        <nextscreens timeout="0" >\n`;
+        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
+        macro += `        </nextscreens>\n`;
+        macro += `    </screen>\n\n`;
+        blockCounter++;
+
+        const inputValue = `${valorFijo}[tab]${par}[field+]${texto}[left][left]N${numero}${importe}[field+][tab][tab]${codfinal}[enter]`;
+
+        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="false" transient="false">\n`;
+        macro += `        <description >\n`;
+        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
+        macro += `            <numfields number="323" optional="true" invertmatch="false" />\n`;
+        macro += `            <numinputfields number="135" optional="true" invertmatch="false" />\n`;
+        macro += `        </description>\n`;
+        macro += `        <actions>\n`;
+        macro += `            <input value="${inputValue}" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+        macro += `        </actions>\n`;
+        macro += `        <nextscreens timeout="0" >\n`;
+        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
+        macro += `        </nextscreens>\n`;
+        macro += `    </screen>\n\n`;
+        blockCounter++;
+
+        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="false" transient="false">\n`;
+        macro += `        <description >\n`;
+        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
+        macro += `            <numfields number="325" optional="true" invertmatch="false" />\n`;
+        macro += `            <numinputfields number="135" optional="true" invertmatch="false" />\n`;
+        macro += `        </description>\n`;
+        macro += `        <actions>\n`;
+        macro += `            <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+        macro += `        </actions>\n`;
+        macro += `        <nextscreens timeout="0" >\n`;
+        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
+        macro += `        </nextscreens>\n`;
+        macro += `    </screen>\n\n`;
+        blockCounter++;
+
+        const isLastBlock = (idx === rawLines.length - 1);
+        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="${isLastBlock ? "true" : "false"}" transient="false">\n`;
+        macro += `        <description >\n`;
+        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
+        macro += `            <numfields number="76" optional="true" invertmatch="false" />\n`;
+        macro += `            <numinputfields number="8" optional="true" invertmatch="false" />\n`;
+        macro += `        </description>\n`;
+        macro += `        <actions>\n`;
+        macro += `            <input value="[pf10]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+        macro += `        </actions>\n`;
+        macro += `        <nextscreens timeout="0" >\n`;
+        if (!isLastBlock) {
+          macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
+        }
+        macro += `        </nextscreens>\n`;
+        macro += `    </screen>\n\n`;
+        blockCounter++;
+      });
+
+      macro += `</HAScript>`;
+      document.getElementById('output').textContent = macro;
+    }
+
+    function copyMacro() {
+      const macro = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(macro).then(() => {
+        alert("¡Macro copiado al portapapeles!");
+      });
+    }
+
+    function clearOutput() {
+      document.getElementById('output').textContent = "";
+    }
+  </script>
+</body>
+</html>

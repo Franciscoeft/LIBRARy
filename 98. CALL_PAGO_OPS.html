@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/florf/Downloads/biblioteca_de_macros%20(6).html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Macro 'Super Prueba 6'</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; max-width: 900px; margin: auto; }
+    h1 { text-align: center; color: #333; }
+    textarea { width: 100%; padding: 10px; margin-bottom: 1rem; font-family: monospace; font-size: 14px; }
+    #listInput { height: 120px; }
+    #output { white-space: pre-wrap; background: #fff; padding: 1rem; border: 1px solid #ccc; min-height: 200px; overflow: auto; max-height: 400px; }
+    button { padding: 10px 20px; font-size: 16px; margin-right: 0.5rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Macro 'Super Prueba 6'</h1>
+  <p>Pega tu listado de valores (<code>CÓDIGO	PAR</code> por línea):</p>
+  <textarea id="listInput" placeholder="241471	6
+251504	7
+..."></textarea>
+  <button onclick="generateMacro()">GENERAR MACRO</button>
+  <button onclick="copyMacro()">COPIAR MACRO</button>
+  <h2>Macro Generado:</h2>
+  <pre id="output">&lt;HAScript name="super prueba 6" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="luqun" creationdate="Jul 2, 2025 9:27:22 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false"&gt;
+
+    &lt;screen name="Screen1" entryscreen="true" exitscreen="false" transient="false"&gt;
+        &lt;description&gt;
+            &lt;oia status="NOTINHIBITED" optional="false" invertmatch="false"/&gt;
+        &lt;/description&gt;
+        &lt;actions&gt;
+            &lt;input value="241471[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/&gt;
+        &lt;/actions&gt;
+        &lt;nextscreens timeout="0"&gt;
+            &lt;nextscreen name="Screen2"/&gt;
+        &lt;/nextscreens&gt;
+    &lt;/screen&gt;
+
+    &lt;screen name="Screen2" entryscreen="false" exitscreen="false" transient="false"&gt;
+        &lt;description&gt;
+            &lt;oia status="NOTINHIBITED" optional="false" invertmatch="false"/&gt;
+            &lt;numfields number="260" optional="true" invertmatch="false"/&gt;
+            &lt;numinputfields number="6" optional="true" invertmatch="false"/&gt;
+        &lt;/description&gt;
+        &lt;actions&gt;
+            &lt;input value="nogasox[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/&gt;
+        &lt;/actions&gt;
+        &lt;nextscreens timeout="0"&gt;
+            &lt;nextscreen name="Screen3"/&gt;
+        &lt;/nextscreens&gt;
+    &lt;/screen&gt;
+
+    &lt;screen name="Screen3" entryscreen="false" exitscreen="false" transient="false"&gt;
+        &lt;description&gt;
+            &lt;oia status="NOTINHIBITED" optional="false" invertmatch="false"/&gt;
+            &lt;numfields number="231" optional="true" invertmatch="false"/&gt;
+            &lt;numinputfields number="13" optional="true" invertmatch="false"/&gt;
+        &lt;/description&gt;
+        &lt;actions&gt;
+            &lt;input value="[pagedn][pagedn][pagedn][pagedn][down][down][tab]1[field+]36800[field+][pagedn][pagedn][pagedn][up][up][up][tab]1[field+]2100[field+][pagedn][pagedn][tab]1[field+]3675[field+][pf5][pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/&gt;
+        &lt;/actions&gt;
+        &lt;nextscreens timeout="0"&gt;
+            &lt;nextscreen name="Screen4"/&gt;
+        &lt;/nextscreens&gt;
+    &lt;/screen&gt;
+
+    &lt;screen name="Screen4" entryscreen="true" exitscreen="false" transient="false"&gt;
+        &lt;description&gt;
+            &lt;oia status="NOTINHIBITED" optional="false" invertmatch="false"/&gt;
+        &lt;/description&gt;
+        &lt;actions&gt;
+            &lt;input value="241431[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/&gt;
+        &lt;/actions&gt;
+        &lt;nextscreens timeout="0"&gt;
+            &lt;nextscreen name="Screen5"/&gt;
+        &lt;/nextscreens&gt;
+    &lt;/screen&gt;
+
+    &lt;screen name="Screen5" entryscreen="false" exitscreen="false" transient="false"&gt;
+        &lt;description&gt;
+            &lt;oia status="NOTINHIBITED" optional="false" invertmatch="false"/&gt;
+            &lt;numfields number="260" optional="true" invertmatch="false"/&gt;
+            &lt;numinputfields number="6" optional="true" invertmatch="false"/&gt;
+        &lt;/description&gt;
+        &lt;actions&gt;
+            &lt;input value="nogasox[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/&gt;
+        &lt;/actions&gt;
+        &lt;nextscreens timeout="0"&gt;
+            &lt;nextscreen name="Screen6"/&gt;
+        &lt;/nextscreens&gt;
+    &lt;/screen&gt;
+
+    &lt;screen name="Screen6" entryscreen="false" exitscreen="true" transient="false"&gt;
+        &lt;description&gt;
+            &lt;oia status="NOTINHIBITED" optional="false" invertmatch="false"/&gt;
+            &lt;numfields number="231" optional="true" invertmatch="false"/&gt;
+            &lt;numinputfields number="13" optional="true" invertmatch="false"/&gt;
+        &lt;/description&gt;
+        &lt;actions&gt;
+            &lt;input value="[pagedn][pagedn][pagedn][pagedn][down][down][tab]1[field+]36800[field+][pagedn][pagedn][pagedn][up][up][up][tab]1[field+]1800[field+][pagedn][pagedn][tab]1[field+]3150[field+][pf5][pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/&gt;
+        &lt;/actions&gt;
+        &lt;nextscreens timeout="0"&gt;
+        &lt;/nextscreens&gt;
+    &lt;/screen&gt;
+
+&lt;/HAScript&gt;</pre>
+
+  <script>
+    const paramsMap = { '6': [36800, 3150, 1800], '7': [36800, 3675, 2100], '8': [36800, 4200, 2400] };
+
+    function generateMacro() {
+      const lines = document.getElementById('listInput').value.trim().split(/\r?\n/).filter(l=>l);
+      const entries = lines.map(l=>l.split(/\s|\t/));
+      const totalScreens = entries.length * 3;
+      let count = 0;
+      let script = `<HAScript name="super prueba 6" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="luqun" creationdate="Jul 2, 2025 9:27:22 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n\n`;
+
+      entries.forEach(([code, par])=>{
+        for(let step=1; step<=3; step++){
+          count++;
+          const entry = (step===1);
+          const exit = (step===3 && count===totalScreens);
+          // Description lines
+          let descLines = [`<oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/>`];
+          if(step===2) descLines.push(`<numfields number=\"260\" optional=\"true\" invertmatch=\"false\"/>`, `<numinputfields number=\"6\" optional=\"true\" invertmatch=\"false\"/>`);
+          if(step===3) descLines.push(`<numfields number=\"231\" optional=\"true\" invertmatch=\"false\"/>`, `<numinputfields number=\"13\" optional=\"true\" invertmatch=\"false\"/>`);
+          // Action value
+          let actionValue = '';
+          if(step===1) actionValue = `${code}[enter]`;
+          else if(step===2) actionValue = `nogasox[enter]`;
+          else {
+            const [v1,v2,v3] = paramsMap[par] || paramsMap['6'];
+            actionValue = `[pagedn][pagedn][pagedn][pagedn][down][down][tab]1[field+]${v1}[field+][pagedn][pagedn][pagedn][up][up][up][tab]1[field+]${v3}[field+][pagedn][pagedn][tab]1[field+]${v2}[field+][pf5][pf3]`;
+          }
+          // Build screen
+          script += `    <screen name=\"Screen${count}\" entryscreen=\"${entry}\" exitscreen=\"${exit}\" transient=\"false\">\n`;
+          script += `        <description>\n            ${descLines.join('\n            ')}\n        </description>\n`;
+          script += `        <actions>\n            <input value=\"${actionValue}\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/>\n        </actions>\n`;
+          script += `        <nextscreens timeout=\"0\">\n`;
+          // Next screen if not last
+          if(count < totalScreens) script += `            <nextscreen name=\"Screen${count+1}\"/>\n`;
+          script += `        </nextscreens>\n    </screen>\n\n`;
+        }
+      });
+
+      script += `</HAScript>`;
+      document.getElementById('output').textContent = script;
+    }
+
+    function copyMacro() {
+      navigator.clipboard.writeText(document.getElementById('output').textContent).then(()=>alert('Macro copiado al portapapeles'));
+    }
+  </script>
+
+
+</body></html>

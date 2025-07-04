@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Macro Timbrado</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; max-width: 900px; margin: auto; }
+    h1 { text-align: center; color: #333; }
+    textarea { width: 100%; height: 120px; padding: 10px; margin-bottom: 1rem; font-family: monospace; font-size: 14px; }
+    button { padding: 10px 20px; font-size: 16px; margin: 0.5rem 0; cursor: pointer; }
+    #outputContainer { margin-top: 2rem; }
+    #output { white-space: pre-wrap; background: #fff; padding: 1rem; border: 1px solid #ccc; min-height: 200px; overflow: auto; max-height: 400px; }
+    label { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Macro Timbrado</h1>
+  <p>Pega aquí tu listado de valores (uno por línea), que reemplazarán el valor de pantalla 1:</p>
+  <textarea id="inputList" placeholder="R090538\nR090539\n..."></textarea>
+  <br>
+  <button onclick="generateMacro()">GENERAR MACRO</button>
+  <button onclick="copyMacro()">COPIAR MACRO</button>
+
+  <div id="outputContainer">
+    <h2>Previsualización del Macro</h2>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    // Genera un screen con enlace siempre al siguiente, y marca exitscreen solo en el último global
+    const screenTemplate = (code, index, total) => {
+      const actionMap = {
+        1: code + '[enter]',
+        2: '[down]t[enter]',
+        3: 'i[enter]',
+        4: '[pf3]',
+        5: '[pf5]',
+        6: '[enter]',
+        7: '[pf10]'
+      };
+      const step = ((index - 1) % 7) + 1;
+      const entryscreen = step === 1;
+      const exitscreen = index === total;
+      const actionValue = actionMap[step];
+      const nextScreenTag = index < total ? `    <nextscreen name=\"Screen${index + 1}\" />` : '';
+
+      return `    <screen name=\"Screen${index}\" entryscreen=\"${entryscreen}\" exitscreen=\"${exitscreen}\" transient=\"false\">
+        <description >
+            <oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\" />
+        </description>
+        <actions>
+            <input value=\"${actionValue}\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\" />
+        </actions>
+        <nextscreens timeout=\"0\" >
+${nextScreenTag}
+        </nextscreens>
+    </screen>`;
+    };
+
+    function generateMacro() {
+      const lines = document.getElementById('inputList').value
+        .trim().split(/\r?\n/).filter(l => l);
+      const totalScreens = lines.length * 7;
+      let content = `<HAScript name=\"timbrado t\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"florf\" creationdate=\"Jul 3, 2025 9:23:12 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">\n\n`;
+      let screenCount = 0;
+      lines.forEach(code => {
+        for (let i = 1; i <= 7; i++) {
+          screenCount++;
+          content += screenTemplate(code, screenCount, totalScreens) + '\n\n';
+        }
+      });
+      content += '</HAScript>';
+      document.getElementById('output').textContent = content;
+    }
+
+    function copyMacro() {
+      const text = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(text).then(() => alert('Macro copiado al portapapeles'));
+    }
+  </script>
+
+</body>
+</html>

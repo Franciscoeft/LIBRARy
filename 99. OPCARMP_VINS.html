@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FRNK APPS - Generar Macro</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 2rem; }
+    h1 { margin-bottom: 1rem; }
+    textarea, input, button, select {
+      width: 100%; margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;
+    }
+    #output {
+      white-space: pre;
+      background: #fff;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      overflow: auto;
+      max-height: 300px;
+    }
+    a#downloadLink {
+      display: none;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      background: #007BFF;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🛠️ FRNK APPS – Generar Macro</h1>
+
+<section id="macro">
+  <h2>🚗 MacroBot Frank</h2>
+  <p>Sube un archivo <strong>.txt</strong> con un VIN y un CÓDIGO por línea (separados por tabulación).</p>
+  <input type="file" id="fileInput" accept=".txt">
+  <button onclick="generarMacro()">GENERAR MACRO ARMADO</button>
+  <a id="downloadLink" download="macro_vins_generado.mac">⬇ Descargar Macro .mac</a>
+  <h3>Vista previa:</h3>
+  <div id="output"></div>
+</section>
+
+<script>
+function generarMacro() {
+  const fileInput = document.getElementById("fileInput");
+  const output = document.getElementById("output");
+  const reader = new FileReader();
+
+  if (!fileInput.files[0]) return alert("Selecciona un archivo .txt con VINs y códigos");
+
+  reader.onload = function (e) {
+    const lines = e.target.result.trim().split(/\r?\n/).filter(l => l);
+    let macro = `<HAScript name="macro_vins_lineal" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="frank" creationdate="Jun 19, 2025" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">`;
+
+    lines.forEach((line, i) => {
+      const [vin, codigo] = line.split("\t");
+      const id = String(i + 1).padStart(3, '0');
+      const next = String(i + 2).padStart(3, '0');
+      macro += `
+    <screen name="Screen1_${id}" entryscreen="true" exitscreen="false" transient="false">
+      <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
+      <actions><input value="[pf11]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+      <nextscreens timeout="0"><nextscreen name="Screen2_${id}" /></nextscreens>
+    </screen>
+    <screen name="Screen2_${id}" entryscreen="false" exitscreen="false" transient="false">
+      <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /><numfields number="163" optional="true" invertmatch="false" /><numinputfields number="4" optional="true" invertmatch="false" /></description>
+      <actions><input value="${vin}[up]${codigo}[down][down][down][down][down][down][down][down]061925[field+][enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+      <nextscreens timeout="0"><nextscreen name="Screen3_${id}" /></nextscreens>
+    </screen>
+    <screen name="Screen3_${id}" entryscreen="false" exitscreen="false" transient="false">
+      <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
+      <actions><input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+      <nextscreens timeout="0"><nextscreen name="Screen4_${id}" /></nextscreens>
+    </screen>
+    <screen name="Screen4_${id}" entryscreen="false" exitscreen="false" transient="false">
+      <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
+      <actions><input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+      <nextscreens timeout="0"><nextscreen name="Screen1_${next}" /></nextscreens>
+    </screen>`;
+    });
+
+    macro += `
+</HAScript>`;
+    output.textContent = macro;
+
+    const blob = new Blob([macro], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.getElementById("downloadLink");
+    link.href = url;
+    link.style.display = "inline-block";
+  };
+
+  reader.readAsText(fileInput.files[0]);
+}
+</script>
+
+</body>
+</html>
