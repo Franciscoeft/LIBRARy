@@ -14,10 +14,10 @@
     .sidebar ul { list-style: none; flex-grow: 1; overflow-y: auto; }
     .sidebar li { border-bottom: 1px solid #374151; }
     .sidebar li button { width: 100%; text-align: left; padding: 0.75rem 1rem; background: none; border: none; color: inherit; cursor: pointer; font-size: 1rem; }
+    .sidebar li button.active { background-color: #374151; }
     .sidebar li button:hover { background-color: #374151; }
     /* Main content */
     .main { flex-grow: 1; padding: 1rem; overflow-y: auto; background-color: #f3f4f6; }
-    .main h1 { margin-bottom: 1rem; }
     .macro-frame { width: 100%; height: calc(100vh - 2rem); border: none; }
   </style>
 </head>
@@ -25,39 +25,63 @@
   <!-- Sidebar -->
   <nav class="sidebar">
     <h2>Macros</h2>
-    <ul id="macroList">
-      <li><button data-macro="vinFord">VINs FORD</button></li>
-      <li><button data-macro="ccp">Filtrar para CCP</button></li>
-      <li><button data-macro="timbrado">Timbrado Normal</button></li>
-      <li><button data-macro="traslado">Timbrar Traslado</button></li>
-      <li><button data-macro="send3b">SEND 3B</button></li>
+    <ul>
+      <li><button data-macro="billMercancia">99. BILLTRKR1_MERCANCIA</button></li>
+      <li><button data-macro="billRegimen">99. BILLTRKR1_REGIMEN_CCP</button></li>
+      <li><button data-macro="billTimbrarTA">99. BILLTRKR1_TIMBRAR_TA</button></li>
+      <li><button data-macro="billTimbrarTD">99. BILLTRKR1_TIMBRAR_TD</button></li>
+      <li><button data-macro="fileMercancia">99. FILE_MERCANCIA_CCP</button></li>
+      <li><button data-macro="opcarmpVins">99. OPCARMP_VINS</button></li>
+      <li><button data-macro="opcarshSend996">99. OPCARSH_SEND_996</button></li>
     </ul>
   </nav>
 
-  <!-- Área principal -->
+  <!-- Main content -->
   <section class="main">
-    <iframe id="macroFrame" class="macro-frame" src=""></iframe>
+    <iframe id="macroFrame" class="macro-frame"></iframe>
   </section>
 
   <script>
+    // Mapea cada key a su archivo HTML (sin codificar espacios)
     const macroFiles = {
-      vinFord: "99. VINs FORD.html",
-      ccp: "99. GENERADOR DE M CCP.html",
-      timbrado: "99. TIMBRADO NORMAL OK.html",
-      traslado: "99. TIMBRAR TRASLADO.html",
-      send3b: "99. SEND 3B.html"
+      billMercancia: "99. BILLTRKR1_MERCANCIA.html",
+      billRegimen:   "99. BILLTRKR1_REGIMEN_CCP.html",
+      billTimbrarTA: "99. BILLTRKR1_TIMBRAR_TA.html",
+      billTimbrarTD: "99. BILLTRKR1_TIMBRAR_TD.html",
+      fileMercancia: "99. FILE_MERCANCIA_CCP.html",
+      opcarmpVins:   "99. OPCARMP_VINS.html",
+      opcarshSend996:"99. OPCARSH_SEND_996.html"
     };
 
-    document.querySelectorAll('.sidebar button').forEach(btn => {
+    const frame = document.getElementById('macroFrame');
+    const buttons = document.querySelectorAll('.sidebar button');
+
+    function loadMacro(key, btn) {
+      // Desactivar todos
+      buttons.forEach(b => b.classList.remove('active'));
+      // Activar actual
+      btn.classList.add('active');
+      // Cargar
+      const url = macroFiles[key];
+      if (url) {
+        frame.src = url;
+      } else {
+        console.error(`No hay archivo para la macro '${key}'`);
+      }
+    }
+
+    buttons.forEach(btn => {
       btn.addEventListener('click', () => {
         const key = btn.getAttribute('data-macro');
-        const frame = document.getElementById('macroFrame');
-        frame.src = macroFiles[key] || '';
+        loadMacro(key, btn);
       });
     });
 
-    // Carga inicial
-    document.querySelector('[data-macro="vinFord"]').click();
+    // Carga inicial por defecto
+    document.addEventListener('DOMContentLoaded', () => {
+      const first = buttons[0];
+      loadMacro(first.getAttribute('data-macro'), first);
+    });
   </script>
 </body>
 </html>
