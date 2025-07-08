@@ -3,151 +3,827 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Generador de Macro 'MERCANCIA DE 7'</title>
+  <title>Generador BILLTRKR1_MERCANCIA - HAScript</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
+    :root {
+      --primary-color: #3b82f6;
+      --primary-dark: #1e40af;
+      --secondary-color: #64748b;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #e2e8f0;
+      --border-color: #e5e7eb;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 8px;
+      --radius-lg: 12px;
     }
-    h1 { text-align: center; color: #333; }
-    textarea { width: 100%; padding: 10px; margin-bottom: 1rem; font-family: monospace; font-size: 14px; }
-    #listInput { height: 150px; }
-    #output { white-space: pre-wrap; background: #fff; padding: 1rem; border: 1px solid #ccc; min-height: 300px; overflow: auto; max-height: 600px; }
-    button { padding: 10px 20px; font-size: 16px; margin-right: 0.5rem; cursor: pointer; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      min-height: calc(100vh - 2rem);
+    }
+
+    .panel {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .panel-subtitle {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    .panel-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      transition: var(--transition);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      resize: vertical;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-input.error {
+      border-color: var(--error-color);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-help {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: var(--radius);
+      border-left: 3px solid var(--error-color);
+    }
+
+    .success-message {
+      color: var(--success-color);
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: var(--radius);
+      border-left: 3px solid var(--success-color);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      min-height: 44px;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--bg-secondary);
+      border-color: var(--primary-color);
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .templates-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .template-btn {
+      padding: 0.5rem;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    .template-btn:hover {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+    }
+
+    .config-section {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+    }
+
+    .config-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .config-field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .config-field label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    .config-field input, .config-field select {
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+    }
+
+    .output-container {
+      flex: 1;
+      background: #1a1a1a;
+      border-radius: var(--radius);
+      padding: 1rem;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: #e5e5e5;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      position: relative;
+    }
+
+    .output-placeholder {
+      color: #666;
+      font-style: italic;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      font-size: 0.75rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--text-secondary);
+    }
+
+    .stat-value {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .copy-indicator {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--success-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .copy-indicator.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .progress-bar {
+      height: 3px;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0.5rem;
+      }
+
+      body {
+        padding: 0.5rem;
+      }
+
+      .config-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Generador de Macro 'MERCANCIA DE 7'</h1>
-  <p>Pega tu listado de valores (cada línea en formato):</p>
-  <pre>Mxxxxxxx PAR</pre>
-  <textarea id="listInput" placeholder="M652540 7\nM652545 7"></textarea>
-  <button onclick="generateMacro()">GENERAR MACRO</button>
-  <button onclick="copyMacro()">COPIAR MACRO</button>
-  <button onclick="clearOutput()">LIMPIAR PREVISUALIZACIÓN</button>
-  <h2>Macro Generado:</h2>
-  <pre id="output"></pre>
+  <div class="container">
+    <!-- Panel de entrada -->
+    <div class="panel">
+      <div class="panel-header">
+        <h1 class="panel-title">🛠️ Generador MERCANCIA</h1>
+        <p class="panel-subtitle">Automatización de macros para mercancía de 7</p>
+      </div>
+      
+      <div class="panel-content">
+        <!-- Plantillas rápidas -->
+        <div class="templates-section">
+          <label class="form-label">⚡ Plantillas rápidas</label>
+          <div class="template-grid">
+            <button class="template-btn" onclick="loadTemplate('sample')">
+              📝 Ejemplo
+            </button>
+            <button class="template-btn" onclick="loadTemplate('batch6')">
+              📦 Lote PAR 6
+            </button>
+            <button class="template-btn" onclick="loadTemplate('batch7')">
+              📦 Lote PAR 7
+            </button>
+            <button class="template-btn" onclick="loadTemplate('batch8')">
+              📦 Lote PAR 8
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuración avanzada -->
+        <div class="config-section">
+          <div class="config-title">⚙️ Configuración</div>
+          <div class="config-grid">
+            <div class="config-field">
+              <label>Autor</label>
+              <input type="text" id="authorInput" value="florf">
+            </div>
+            <div class="config-field">
+              <label>Timeout (ms)</label>
+              <input type="number" id="timeoutInput" value="60000" min="1000">
+            </div>
+            <div class="config-field">
+              <label>Pausa (ms)</label>
+              <input type="number" id="pauseInput" value="300" min="100">
+            </div>
+            <div class="config-field">
+              <label>Valor fijo</label>
+              <input type="text" id="valorFijoInput" value="25101503">
+            </div>
+          </div>
+        </div>
+
+        <!-- Entrada de datos -->
+        <div class="form-group">
+          <label class="form-label" for="listInput">
+            📄 Datos de entrada
+            <span class="stat-value" id="lineCount">(0 líneas)</span>
+          </label>
+          <textarea 
+            id="listInput" 
+            class="form-input" 
+            rows="8"
+            placeholder="Pega tu listado aquí:&#10;M652540 7&#10;M652545 7&#10;M652550 6&#10;&#10;Formato: CÓDIGO PAR"
+          ></textarea>
+          <div class="form-help">
+            💡 Cada línea debe contener: <strong>Código</strong> seguido de <strong>PAR</strong> (6, 7 u 8)
+          </div>
+          <div id="inputError" class="error-message" style="display: none;"></div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="button-group">
+          <button class="btn btn-primary" onclick="generateMacro()" id="generateBtn">
+            ⚡ Generar Macro
+          </button>
+          <button class="btn btn-success" onclick="copyMacro()" id="copyBtn" disabled>
+            📋 Copiar
+          </button>
+          <button class="btn btn-secondary" onclick="downloadMacro()">
+            💾 Descargar
+          </button>
+          <button class="btn btn-secondary" onclick="clearAll()">
+            🗑️ Limpiar
+          </button>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="progress-bar" id="progressBar" style="display: none;">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de salida -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">📋 Macro Generado</h2>
+        <p class="panel-subtitle">HAScript listo para usar</p>
+      </div>
+      
+      <div class="panel-content">
+        <div class="output-container" id="output">
+          <div class="output-placeholder">
+            🎯 Tu macro aparecerá aquí una vez generado
+          </div>
+        </div>
+        <div class="copy-indicator" id="copyIndicator">
+          ✅ ¡Copiado al portapapeles!
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          📊 Líneas: <span class="stat-value" id="outputLines">0</span>
+        </div>
+        <div class="stat-item">
+          🏷️ Pantallas: <span class="stat-value" id="screenCount">0</span>
+        </div>
+        <div class="stat-item">
+          📝 Caracteres: <span class="stat-value" id="charCount">0</span>
+        </div>
+        <div class="stat-item">
+          ⏱️ Generado: <span class="stat-value" id="generateTime">-</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
+    // Estado de la aplicación
+    let lastGeneratedMacro = '';
+    let currentLineCount = 0;
+
+    // Mapeo de PAR a valores
+    const parValues = {
+      '6': { importe: '9,510.00', texto: 'XUN', numero: '8704319999', codfinal: '03' },
+      '7': { importe: '11,095.00', texto: 'XUN', numero: '8704319999', codfinal: '03' },
+      '8': { importe: '12,680.00', texto: 'XUN', numero: '8704319999', codfinal: '03' }
+    };
+
+    // Plantillas predefinidas
+    const templates = {
+      sample: 'M652540 7\nM652545 7\nM652550 6',
+      batch6: 'M100001 6\nM100002 6\nM100003 6\nM100004 6\nM100005 6',
+      batch7: 'M200001 7\nM200002 7\nM200003 7\nM200004 7\nM200005 7',
+      batch8: 'M300001 8\nM300002 8\nM300003 8\nM300004 8\nM300005 8'
+    };
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeEventListeners();
+      updateLineCount();
+    });
+
+    function initializeEventListeners() {
+      const listInput = document.getElementById('listInput');
+      
+      // Contador de líneas en tiempo real
+      listInput.addEventListener('input', updateLineCount);
+      
+      // Validación en tiempo real
+      listInput.addEventListener('input', validateInput);
+      
+      // Atajos de teclado
+      document.addEventListener('keydown', handleKeyboard);
+    }
+
+    function handleKeyboard(e) {
+      // Ctrl+Enter para generar
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        generateMacro();
+      }
+      
+      // Ctrl+K para copiar
+      if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        copyMacro();
+      }
+    }
+
+    function updateLineCount() {
+      const lines = document.getElementById('listInput').value.split('\n').filter(l => l.trim());
+      currentLineCount = lines.length;
+      document.getElementById('lineCount').textContent = `(${currentLineCount} líneas)`;
+    }
+
+    function validateInput() {
+      const input = document.getElementById('listInput');
+      const errorDiv = document.getElementById('inputError');
+      const lines = input.value.split('\n').filter(l => l.trim());
+      
+      let hasError = false;
+      let errorMessage = '';
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        const parts = line.split(/\s+/);
+        if (parts.length !== 2) {
+          hasError = true;
+          errorMessage = `❌ Línea ${i + 1}: Formato incorrecto. Use: CÓDIGO PAR`;
+          break;
+        }
+        
+        const [codigo, par] = parts;
+        if (!parValues[par]) {
+          hasError = true;
+          errorMessage = `❌ Línea ${i + 1}: PAR "${par}" no válido. Use: 6, 7 u 8`;
+          break;
+        }
+      }
+
+      if (hasError) {
+        input.classList.add('error');
+        errorDiv.textContent = errorMessage;
+        errorDiv.style.display = 'block';
+      } else {
+        input.classList.remove('error');
+        errorDiv.style.display = 'none';
+      }
+
+      return !hasError;
+    }
+
+    function loadTemplate(templateKey) {
+      const template = templates[templateKey];
+      if (template) {
+        document.getElementById('listInput').value = template;
+        updateLineCount();
+        validateInput();
+        
+        // Pequeña animación
+        const input = document.getElementById('listInput');
+        input.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          input.style.transform = 'scale(1)';
+        }, 150);
+      }
+    }
+
     function generateMacro() {
-      const rawLines = document.getElementById('listInput').value.trim().split(/\r?\n/).filter(l => l);
-      if (rawLines.length === 0) {
-        alert("¡Debes ingresar datos!");
+      const startTime = Date.now();
+      
+      if (!validateInput()) {
         return;
       }
 
-      let macro = `<HAScript name="7. MERCANCIA DE 7" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Mar 6, 2025 9:24:10 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n\n`;
+      const rawLines = document.getElementById('listInput').value.trim().split(/\r?\n/).filter(l => l.trim());
+      
+      if (rawLines.length === 0) {
+        showError('❌ Debes ingresar al menos una línea de datos');
+        return;
+      }
+
+      // Mostrar progreso
+      showProgress();
+      
+      // Configuración
+      const author = document.getElementById('authorInput').value || 'florf';
+      const timeout = document.getElementById('timeoutInput').value || '60000';
+      const pausetime = document.getElementById('pauseInput').value || '300';
+      const valorFijo = document.getElementById('valorFijoInput').value || '25101503';
+      
+      const now = new Date();
+      const creationDate = now.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      }) + ' ' + now.toLocaleTimeString('en-US');
+
+      let macro = `<HAScript name="7. MERCANCIA DE 7" description="Generado automáticamente" timeout="${timeout}" pausetime="${pausetime}" promptall="true" blockinput="true" author="${author}" creationdate="${creationDate}" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n\n`;
 
       let blockCounter = 1;
-      const valorFijo = "25101503";
+      let totalScreens = rawLines.length * 5; // 5 pantallas por item
 
       rawLines.forEach((line, idx) => {
         const [codigo, par] = line.trim().split(/\s+/);
-        if (!codigo || !par) {
-          alert(`La línea ${idx+1} no tiene todos los valores requeridos.`);
+        const config = parValues[par];
+        
+        if (!config) {
+          showError(`❌ Error en línea ${idx + 1}: PAR "${par}" no válido`);
           return;
         }
 
-        const texto = "XUN";
-        const importe = par === "6" ? "9,510.00" : par === "7" ? "11,095.00" : "12,680.00";
-        const numero = "8704319999";
-        const codfinal = "03";
+        // Actualizar progreso
+        updateProgress((idx / rawLines.length) * 100);
 
-        macro += `    <screen name="Screen${blockCounter}" entryscreen="true" exitscreen="false" transient="false">\n`;
-        macro += `        <description >\n`;
-        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
-        macro += `        </description>\n`;
-        macro += `        <actions>\n`;
-        macro += `            <input value="${codigo}" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
-        macro += `            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
-        macro += `        </actions>\n`;
-        macro += `        <nextscreens timeout="0" >\n`;
-        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
-        macro += `        </nextscreens>\n`;
-        macro += `    </screen>\n\n`;
-        blockCounter++;
+        const { importe, texto, numero, codfinal } = config;
 
-        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="false" transient="false">\n`;
-        macro += `        <description >\n`;
-        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
-        macro += `            <numfields number="76" optional="true" invertmatch="false" />\n`;
-        macro += `            <numinputfields number="8" optional="true" invertmatch="false" />\n`;
-        macro += `        </description>\n`;
-        macro += `        <actions>\n`;
-        macro += `            <input value="M[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
-        macro += `        </actions>\n`;
-        macro += `        <nextscreens timeout="0" >\n`;
-        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
-        macro += `        </nextscreens>\n`;
-        macro += `    </screen>\n\n`;
-        blockCounter++;
+        // Pantalla 1: Entrada de código
+        macro += createScreen(blockCounter++, true, false, [
+          `<oia status="NOTINHIBITED" optional="false" invertmatch="false" />`
+        ], `${codigo}[enter]`, blockCounter);
 
+        // Pantalla 2: Comando M
+        macro += createScreen(blockCounter++, false, false, [
+          `<oia status="NOTINHIBITED" optional="false" invertmatch="false" />`,
+          `<numfields number="76" optional="true" invertmatch="false" />`,
+          `<numinputfields number="8" optional="true" invertmatch="false" />`
+        ], `M[enter]`, blockCounter);
+
+        // Pantalla 3: Datos principales
         const inputValue = `${valorFijo}[tab]${par}[field+]${texto}[left][left]N${numero}${importe}[field+][tab][tab]${codfinal}[enter]`;
+        macro += createScreen(blockCounter++, false, false, [
+          `<oia status="NOTINHIBITED" optional="false" invertmatch="false" />`,
+          `<numfields number="323" optional="true" invertmatch="false" />`,
+          `<numinputfields number="135" optional="true" invertmatch="false" />`
+        ], inputValue, blockCounter);
 
-        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="false" transient="false">\n`;
-        macro += `        <description >\n`;
-        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
-        macro += `            <numfields number="323" optional="true" invertmatch="false" />\n`;
-        macro += `            <numinputfields number="135" optional="true" invertmatch="false" />\n`;
-        macro += `        </description>\n`;
-        macro += `        <actions>\n`;
-        macro += `            <input value="${inputValue}" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
-        macro += `        </actions>\n`;
-        macro += `        <nextscreens timeout="0" >\n`;
-        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
-        macro += `        </nextscreens>\n`;
-        macro += `    </screen>\n\n`;
-        blockCounter++;
+        // Pantalla 4: PF3
+        macro += createScreen(blockCounter++, false, false, [
+          `<oia status="NOTINHIBITED" optional="false" invertmatch="false" />`,
+          `<numfields number="325" optional="true" invertmatch="false" />`,
+          `<numinputfields number="135" optional="true" invertmatch="false" />`
+        ], `[pf3]`, blockCounter);
 
-        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="false" transient="false">\n`;
-        macro += `        <description >\n`;
-        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
-        macro += `            <numfields number="325" optional="true" invertmatch="false" />\n`;
-        macro += `            <numinputfields number="135" optional="true" invertmatch="false" />\n`;
-        macro += `        </description>\n`;
-        macro += `        <actions>\n`;
-        macro += `            <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
-        macro += `        </actions>\n`;
-        macro += `        <nextscreens timeout="0" >\n`;
-        macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
-        macro += `        </nextscreens>\n`;
-        macro += `    </screen>\n\n`;
-        blockCounter++;
-
+        // Pantalla 5: PF10 (salida si es el último)
         const isLastBlock = (idx === rawLines.length - 1);
-        macro += `    <screen name="Screen${blockCounter}" entryscreen="false" exitscreen="${isLastBlock ? "true" : "false"}" transient="false">\n`;
-        macro += `        <description >\n`;
-        macro += `            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />\n`;
-        macro += `            <numfields number="76" optional="true" invertmatch="false" />\n`;
-        macro += `            <numinputfields number="8" optional="true" invertmatch="false" />\n`;
-        macro += `        </description>\n`;
-        macro += `        <actions>\n`;
-        macro += `            <input value="[pf10]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
-        macro += `        </actions>\n`;
-        macro += `        <nextscreens timeout="0" >\n`;
-        if (!isLastBlock) {
-          macro += `            <nextscreen name="Screen${blockCounter+1}" />\n`;
-        }
-        macro += `        </nextscreens>\n`;
-        macro += `    </screen>\n\n`;
-        blockCounter++;
+        macro += createScreen(blockCounter++, false, isLastBlock, [
+          `<oia status="NOTINHIBITED" optional="false" invertmatch="false" />`,
+          `<numfields number="76" optional="true" invertmatch="false" />`,
+          `<numinputfields number="8" optional="true" invertmatch="false" />`
+        ], `[pf10]`, isLastBlock ? null : blockCounter);
       });
 
       macro += `</HAScript>`;
-      document.getElementById('output').textContent = macro;
+      
+      // Simular procesamiento
+      setTimeout(() => {
+        hideProgress();
+        displayMacro(macro);
+        updateStats(macro, Date.now() - startTime);
+        lastGeneratedMacro = macro;
+        document.getElementById('copyBtn').disabled = false;
+      }, 500);
+    }
+
+    function createScreen(screenNum, isEntry, isExit, descriptions, action, nextScreen) {
+      let screen = `    <screen name="Screen${screenNum}" entryscreen="${isEntry}" exitscreen="${isExit}" transient="false">\n`;
+      screen += `        <description>\n`;
+      descriptions.forEach(desc => {
+        screen += `            ${desc}\n`;
+      });
+      screen += `        </description>\n`;
+      screen += `        <actions>\n`;
+      screen += `            <input value="${action}" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />\n`;
+      screen += `        </actions>\n`;
+      screen += `        <nextscreens timeout="0">\n`;
+      if (nextScreen) {
+        screen += `            <nextscreen name="Screen${nextScreen}" />\n`;
+      }
+      screen += `        </nextscreens>\n`;
+      screen += `    </screen>\n\n`;
+      return screen;
+    }
+
+    function displayMacro(macro) {
+      const outputDiv = document.getElementById('output');
+      outputDiv.textContent = macro;
+      outputDiv.classList.remove('output-placeholder');
+    }
+
+    function updateStats(macro, generateTime) {
+      const lines = macro.split('\n').length;
+      const chars = macro.length;
+      const screens = (macro.match(/<screen name=/g) || []).length;
+      
+      document.getElementById('outputLines').textContent = lines;
+      document.getElementById('screenCount').textContent = screens;
+      document.getElementById('charCount').textContent = chars.toLocaleString();
+      document.getElementById('generateTime').textContent = `${generateTime}ms`;
+    }
+
+    function showProgress() {
+      document.getElementById('progressBar').style.display = 'block';
+      document.getElementById('generateBtn').disabled = true;
+    }
+
+    function hideProgress() {
+      document.getElementById('progressBar').style.display = 'none';
+      document.getElementById('generateBtn').disabled = false;
+      updateProgress(0);
+    }
+
+    function updateProgress(percent) {
+      document.getElementById('progressFill').style.width = percent + '%';
     }
 
     function copyMacro() {
-      const macro = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(macro).then(() => {
-        alert("¡Macro copiado al portapapeles!");
+      if (!lastGeneratedMacro) {
+        showError('❌ No hay macro generado para copiar');
+        return;
+      }
+
+      navigator.clipboard.writeText(lastGeneratedMacro).then(() => {
+        showCopyIndicator();
+      }).catch(() => {
+        showError('❌ Error al copiar al portapapeles');
       });
     }
 
-    function clearOutput() {
-      document.getElementById('output').textContent = "";
+    function showCopyIndicator() {
+      const indicator = document.getElementById('copyIndicator');
+      indicator.classList.add('show');
+      setTimeout(() => {
+        indicator.classList.remove('show');
+      }, 2000);
+    }
+
+    function downloadMacro() {
+      if (!lastGeneratedMacro) {
+        showError('❌ No hay macro generado para descargar');
+        return;
+      }
+
+      const blob = new Blob([lastGeneratedMacro], { type: 'text/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `MERCANCIA_${new Date().getTime()}.hascript`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function clearAll() {
+      if (confirm('¿Estás seguro de que quieres limpiar todo?')) {
+        document.getElementById('listInput').value = '';
+        document.getElementById('output').innerHTML = '<div class="output-placeholder">🎯 Tu macro aparecerá aquí una vez generado</div>';
+        document.getElementById('copyBtn').disabled = true;
+        lastGeneratedMacro = '';
+        updateLineCount();
+        updateStats('', 0);
+        hideProgress();
+      }
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('inputError');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
     }
   </script>
 </body>

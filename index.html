@@ -3,84 +3,685 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Biblioteca de Macros</title>
+  <title>Biblioteca de Macros HAScript</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Reset básico */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+    :root {
+      --primary-color: #3b82f6;
+      --primary-dark: #1e40af;
+      --secondary-color: #64748b;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #e2e8f0;
+      --border-color: #e5e7eb;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --sidebar-width: 280px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --text-primary: #f9fafb;
+      --text-secondary: #d1d5db;
+      --bg-primary: #111827;
+      --bg-secondary: #1f2937;
+      --bg-tertiary: #374151;
+      --border-color: #4b5563;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      height: 60px;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 100;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-secondary);
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--primary-color);
+    }
+
     /* Sidebar */
-    .sidebar { width: 250px; background-color: #1f2937; color: #fff; flex-shrink: 0; display: flex; flex-direction: column; }
-    .sidebar h2 { padding: 1rem; text-align: center; background-color: #111827; font-size: 1.25rem; }
-    .sidebar ul { list-style: none; flex-grow: 1; overflow-y: auto; }
-    .sidebar li { border-bottom: 1px solid #374151; }
-    .sidebar li button { width: 100%; text-align: left; padding: 0.75rem 1rem; background: none; border: none; color: inherit; cursor: pointer; font-size: 1rem; }
-    .sidebar li button.active { background-color: #374151; }
-    .sidebar li button:hover { background-color: #374151; }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-primary);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      z-index: 200;
+      transition: var(--transition);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-header p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    .search-container {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .macro-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+
+    .macro-category {
+      margin-bottom: 1rem;
+    }
+
+    .category-title {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .macro-item {
+      display: block;
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: none;
+      border: none;
+      text-align: left;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .macro-item:hover {
+      background: var(--bg-secondary);
+      border-left-color: var(--primary-color);
+    }
+
+    .macro-item.active {
+      background: rgba(59, 130, 246, 0.1);
+      border-left-color: var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .macro-item.hidden {
+      display: none;
+    }
+
+    .macro-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
     /* Main content */
-    .main { flex-grow: 1; padding: 1rem; overflow-y: auto; background-color: #f3f4f6; }
-    .macro-frame { width: 100%; height: calc(100vh - 2rem); border: none; }
-  </style>
-</head>
-<body>
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <h2>Macros</h2>
-    <ul>
-      <li><button data-macro="billMercancia">99. BILLTRKR1_MERCANCIA</button></li>
-      <li><button data-macro="billRegimen">99. BILLTRKR1_REGIMEN_CCP</button></li>
-      <li><button data-macro="billTimbrarTA">99. BILLTRKR1_TIMBRAR_TA</button></li>
-      <li><button data-macro="billTimbrarTD">99. BILLTRKR1_TIMBRAR_TD</button></li>
-      <li><button data-macro="fileMercancia">99. FILE_MERCANCIA_CCP</button></li>
-      <li><button data-macro="opcarmpVins">99. OPCARMP_VINS</button></li>
-      <li><button data-macro="opcarshSend996">99. OPCARSH_SEND_996</button></li>
-    </ul>
-  </nav>
+    .main {
+      flex: 1;
+      margin-top: 60px;
+      padding: 2rem;
+      overflow-y: auto;
+      background: var(--bg-secondary);
+      transition: var(--transition);
+    }
 
-  <!-- Main content -->
-  <section class="main">
-    <iframe id="macroFrame" class="macro-frame"></iframe>
-  </section>
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-  <script>
-    // Mapea cada key a su archivo HTML (sin codificar espacios)
-    const macroFiles = {
-      billMercancia: "99. BILLTRKR1_MERCANCIA.html",
-      billRegimen:   "99. BILLTRKR1_REGIMEN_CCP.html",
-      billTimbrarTA: "99. BILLTRKR1_TIMBRAR_TA.html",
-      billTimbrarTD: "99. BILLTRKR1_TIMBRAR_TD.html",
-      fileMercancia: "99. FILE_MERCANCIA_CCP.html",
-      opcarmpVins:   "99. OPCARMP_VINS.html",
-      opcarshSend996:"99. OPCARSH_SEND_996.html"
-    };
+    .welcome-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
 
-    const frame = document.getElementById('macroFrame');
-    const buttons = document.querySelectorAll('.sidebar button');
+    .welcome-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
 
-    function loadMacro(key, btn) {
-      // Desactivar todos
-      buttons.forEach(b => b.classList.remove('active'));
-      // Activar actual
-      btn.classList.add('active');
-      // Cargar
-      const url = macroFiles[key];
-      if (url) {
-        frame.src = url;
-      } else {
-        console.error(`No hay archivo para la macro '${key}'`);
+    .welcome-description {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-primary);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-number {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    .macro-frame {
+      width: 100%;
+      height: calc(100vh - 120px);
+      border: none;
+      border-radius: 12px;
+      background: var(--bg-primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .loading-spinner {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 100%;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        transition: left 0.3s ease;
+        z-index: 1000;
+      }
+
+      .sidebar.mobile-open {
+        left: 0;
+      }
+
+      .header {
+        left: 0;
+      }
+
+      .mobile-menu-btn {
+        display: block !important;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-primary);
+      }
+
+      .welcome-title {
+        font-size: 1.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const key = btn.getAttribute('data-macro');
-        loadMacro(key, btn);
-      });
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-overlay.show {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <h1 id="pageTitle">Biblioteca de Macros HAScript</h1>
+    </div>
+    <div class="header-controls">
+      <button class="theme-toggle" id="themeToggle" title="Cambiar tema">
+        <span id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Generadores de Macros</h2>
+      <p>Herramientas para automatización HAScript</p>
+    </div>
+    
+    <div class="search-container">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput"
+        placeholder="Buscar macros..."
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="macro-list">
+      <div class="macro-category">
+        <div class="category-title">Facturación y Billing</div>
+        <button class="macro-item" data-macro="billMercancia" data-description="Generador de macros para mercancía de 7">
+          <div>BILLTRKR1_MERCANCIA</div>
+          <div class="macro-description">Automatización de facturación de mercancías</div>
+        </button>
+        <button class="macro-item" data-macro="billRegimen" data-description="Generador para régimen CCP">
+          <div>BILLTRKR1_REGIMEN_CCP</div>
+          <div class="macro-description">Configuración de régimen CCP</div>
+        </button>
+        <button class="macro-item" data-macro="billTimbrarTA" data-description="Timbrado automático TA">
+          <div>BILLTRKR1_TIMBRAR_TA</div>
+          <div class="macro-description">Automatización de timbrado TA</div>
+        </button>
+        <button class="macro-item" data-macro="billTimbrarTD" data-description="Timbrado automático TD">
+          <div>BILLTRKR1_TIMBRAR_TD</div>
+          <div class="macro-description">Automatización de timbrado TD</div>
+        </button>
+      </div>
+
+      <div class="macro-category">
+        <div class="category-title">Archivos y Operaciones</div>
+        <button class="macro-item" data-macro="fileMercancia" data-description="Gestión de archivos de mercancía">
+          <div>FILE_MERCANCIA_CCP</div>
+          <div class="macro-description">Manejo de archivos CCP</div>
+        </button>
+        <button class="macro-item" data-macro="opcarmpVins" data-description="Operaciones VINS">
+          <div>OPCARMP_VINS</div>
+          <div class="macro-description">Gestión de números VIN</div>
+        </button>
+        <button class="macro-item" data-macro="opcarshSend996" data-description="Envío automático 996">
+          <div>OPCARSH_SEND_996</div>
+          <div class="macro-description">Automatización de envíos 996</div>
+        </button>
+      </div>
+
+      <div class="macro-category">
+        <div class="category-title">Pagos y Operaciones</div>
+        <button class="macro-item" data-macro="callPagoOps" data-description="Operaciones de pago automatizadas">
+          <div>CALL_PAGO_OPS</div>
+          <div class="macro-description">Procesamiento automático de pagos</div>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-icon">
+        <span style="font-size: 2rem;">⚙️</span>
+      </div>
+      <h1 class="welcome-title">Biblioteca de Macros HAScript</h1>
+      <p class="welcome-description">
+        Genera automáticamente macros HAScript para tus procesos de negocio. 
+        Selecciona una herramienta del menú lateral para comenzar.
+      </p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="totalMacros">8</div>
+          <div class="stat-label">Generadores disponibles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Automático</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">⚡</div>
+          <div class="stat-label">Rápido</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">✓</div>
+          <div class="stat-label">Confiable</div>
+        </div>
+      </div>
+    </div>
+    
+    <div style="position: relative; display: none;" id="frameContainer">
+      <iframe id="macroFrame" class="macro-frame"></iframe>
+      <div class="loading-spinner" id="loadingSpinner"></div>
+    </div>
+  </main>
+
+  <script>
+    // Mapeo de macros a archivos
+    const macroFiles = {
+      billMercancia: "99. BILLTRKR1_MERCANCIA.html",
+      billRegimen: "99. BILLTRKR1_REGIMEN_CCP.html",
+      billTimbrarTA: "99. BILLTRKR1_TIMBRAR_TA.html",
+      billTimbrarTD: "99. BILLTRKR1_TIMBRAR_TD.html",
+      fileMercancia: "99. FILE_MERCANCIA_CCP.html",
+      opcarmpVins: "99. OPCARMP_VINS.html",
+      opcarshSend996: "99. OPCARSH_SEND_996.html",
+      callPagoOps: "98. CALL_PAGO_OPS.html"
+    };
+
+    // Referencias del DOM
+    const frame = document.getElementById('macroFrame');
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const frameContainer = document.getElementById('frameContainer');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const pageTitle = document.getElementById('pageTitle');
+    const searchInput = document.getElementById('searchInput');
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const buttons = document.querySelectorAll('.macro-item');
+
+    // Estado de la aplicación
+    let currentMacro = null;
+    let currentTheme = localStorage.getItem('theme') || 'light';
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeTheme();
+      initializeEventListeners();
+      updateTotalMacros();
     });
 
-    // Carga inicial por defecto
-    document.addEventListener('DOMContentLoaded', () => {
-      const first = buttons[0];
-      loadMacro(first.getAttribute('data-macro'), first);
+    function initializeTheme() {
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function initializeEventListeners() {
+      // Botones de macro
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-macro');
+          const title = btn.querySelector('div').textContent;
+          loadMacro(key, btn, title);
+        });
+      });
+
+      // Búsqueda
+      searchInput.addEventListener('input', handleSearch);
+
+      // Toggle de tema
+      themeToggle.addEventListener('click', toggleTheme);
+
+      // Menú móvil
+      mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+
+      // Teclas de acceso rápido
+      document.addEventListener('keydown', handleKeyboard);
+
+      // Responsive
+      window.addEventListener('resize', handleResize);
+    }
+
+    function loadMacro(key, btn, title) {
+      if (currentMacro === key) return;
+
+      // Mostrar loading
+      showLoading();
+      
+      // Actualizar estado visual
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Actualizar título
+      pageTitle.textContent = title;
+      
+      // Cargar archivo
+      const url = macroFiles[key];
+      if (url) {
+        frame.src = url;
+        currentMacro = key;
+        
+        // Simular tiempo de carga mínimo para UX
+        setTimeout(() => {
+          hideLoading();
+          showFrame();
+        }, 500);
+        
+        // Cerrar menú móvil si está abierto
+        closeMobileMenu();
+      } else {
+        console.error(`No hay archivo para la macro '${key}'`);
+        hideLoading();
+      }
+    }
+
+    function showLoading() {
+      loadingSpinner.style.display = 'block';
+    }
+
+    function hideLoading() {
+      loadingSpinner.style.display = 'none';
+    }
+
+    function showFrame() {
+      welcomeScreen.style.display = 'none';
+      frameContainer.style.display = 'block';
+    }
+
+    function showWelcome() {
+      frameContainer.style.display = 'none';
+      welcomeScreen.style.display = 'flex';
+      pageTitle.textContent = 'Biblioteca de Macros HAScript';
+      currentMacro = null;
+      buttons.forEach(b => b.classList.remove('active'));
+    }
+
+    function handleSearch() {
+      const query = searchInput.value.toLowerCase().trim();
+      
+      buttons.forEach(btn => {
+        const title = btn.querySelector('div').textContent.toLowerCase();
+        const description = btn.querySelector('.macro-description').textContent.toLowerCase();
+        const matches = title.includes(query) || description.includes(query);
+        
+        btn.classList.toggle('hidden', !matches);
+      });
+
+      // Ocultar categorías vacías
+      document.querySelectorAll('.macro-category').forEach(category => {
+        const visibleItems = category.querySelectorAll('.macro-item:not(.hidden)');
+        category.style.display = visibleItems.length > 0 ? 'block' : 'none';
+      });
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+      themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function toggleMobileMenu() {
+      sidebar.classList.toggle('mobile-open');
+      mobileOverlay.classList.toggle('show');
+    }
+
+    function closeMobileMenu() {
+      sidebar.classList.remove('mobile-open');
+      mobileOverlay.classList.remove('show');
+    }
+
+    function handleKeyboard(e) {
+      // Escape para cerrar menú móvil
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+      }
+      
+      // Ctrl+K para enfocar búsqueda
+      if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      
+      // H para ir al inicio
+      if (e.key === 'h' && !e.ctrlKey && !e.altKey && document.activeElement !== searchInput) {
+        showWelcome();
+      }
+    }
+
+    function handleResize() {
+      if (window.innerWidth > 768) {
+        closeMobileMenu();
+      }
+    }
+
+    function updateTotalMacros() {
+      const total = Object.keys(macroFiles).length;
+      document.getElementById('totalMacros').textContent = total;
+    }
+
+    // Manejar errores del iframe
+    frame.addEventListener('error', () => {
+      console.error('Error cargando el macro');
+      hideLoading();
     });
   </script>
 </body>
