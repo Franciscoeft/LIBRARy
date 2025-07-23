@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Validador de Acomodos</title>
+    <link rel="stylesheet" href="macro-style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>VERIFICADOR DE ACOMDOOS</h1>
+        <p>Pega aquí los datos con tabulaciones OPERADOR	MADRINA	ACOMODO	DESTINO:</p>
+        <textarea id="inputData" placeholder="Pega aquí los datos con tabulaciones..."></textarea>
+        <div class="button-row">
+            <button id="validateButton">Validar</button>
+            <button id="clearButton">Limpiar</button>
+        </div>
+        <div id="resumen"></div>
+        <div id="results"></div>
+    </div>
+    <script>
+    const reglasAcomodo = {
+        AB24: [
+            '6 MAVERICKS',
+            '7 BRONCOS',
+            '5 MAVERICKS Y 1 BRONCO',
+            '6 BRONCOS',
+            '5 BRONCOS Y 1 MAVERICK'
+        ],
+        AC24: [
+            '7 BRONCOS',
+            '5 MAVERICKS Y 1 BRONCO',
+            '6 BRONCOS',
+            '5 BRONCOS Y 1 MAVERICK'
+        ],
+        AT21: [
+            '6 MAVERICKS',
+            '5 MAVERICKS Y 1 BRONCO',
+            '6 BRONCOS',
+            '5 BRONCOS Y 1 MAVERICK'
+        ],
+        AT23: [
+            '8 BRONCOS',
+            '7 BRONCOS',
+            '6 MAVERICKS',
+            '5 MAVERICKS Y 1 BRONCO',
+            '6 BRONCOS',
+            '5 BRONCOS Y 1 MAVERICK'
+        ],
+        AH17: [
+            '8 BRONCOS',
+            '7 BRONCOS',
+            '6 MAVERICKS',
+            '5 MAVERICKS Y 1 BRONCO',
+            '6 BRONCOS',
+            '5 BRONCOS Y 1 MAVERICK'
+        ]
+    };
+
+    function validarAcomodo(nodriza, acomodo) {
+        const tipo = Object.keys(reglasAcomodo).find(key => nodriza.startsWith(key));
+        if (!tipo) {
+            throw new Error(`Tipo de nodriza desconocido para "${nodriza}".`);
+        }
+
+        const opcionesValidas = reglasAcomodo[tipo];
+        if (!opcionesValidas.includes(acomodo.toUpperCase())) {
+            throw new Error(`El acomodo "${acomodo}" no es válido para la nodriza tipo "${tipo}".`);
+        }
+    }
+
+    function contarUnidades(acomodo) {
+        const texto = acomodo.toUpperCase();
+        let mavericks = 0;
+        let broncos = 0;
+
+        const regexMav = /(\d+)\s*MAVERICKS?/;
+        const regexBro = /(\d+)\s*BRONCOS?/;
+
+        const matchMav = texto.match(regexMav);
+        const matchBro = texto.match(regexBro);
+
+        if (matchMav) mavericks += parseInt(matchMav[1]);
+        if (matchBro) broncos += parseInt(matchBro[1]);
+
+        return { mavericks, broncos };
+    }
+
+    function ejecutarValidacion() {
+        const inputData = document.getElementById('inputData').value;
+        const resultsDiv = document.getElementById('results');
+        const resumenDiv = document.getElementById('resumen');
+
+        const rows = inputData.split('\n').map(row => row.split('\t'));
+
+        let totalMavericks = 0;
+        let totalBroncos = 0;
+        let totalNodrizas = 0;
+        const conteoAcomodos = {};
+        // Para detectar duplicados
+        const nodrizasVistas = new Set();
+        const nodrizasDuplicadas = new Set();
+
+        // Primer recorrido: detectar duplicados
+        rows.forEach((row) => {
+            const nodriza = row[1]?.trim();
+            if (!nodriza) return;
+            if (nodrizasVistas.has(nodriza)) {
+                nodrizasDuplicadas.add(nodriza);
+            } else {
+                nodrizasVistas.add(nodriza);
+            }
+        });
+
+        // Segundo recorrido: procesar resultados
+        const results = rows.map((row) => {
+            try {
+                const nodriza = row[1]?.trim();
+                const acomodo = row[2]?.trim();
+                if (!nodriza || !acomodo) throw new Error("Datos incompletos en la fila.");
+
+                // Si es duplicada, marcar como inválida y no contar
+                if (nodrizasDuplicadas.has(nodriza)) {
+                    throw new Error("Nodriza duplicada");
+                }
+
+                validarAcomodo(nodriza, acomodo);
+                const { mavericks, broncos } = contarUnidades(acomodo);
+                totalMavericks += mavericks;
+                totalBroncos += broncos;
+                totalNodrizas += 1;
+                const acomodoKey = acomodo.toUpperCase();
+                conteoAcomodos[acomodoKey] = (conteoAcomodos[acomodoKey] || 0) + 1;
+
+                return `${nodriza}: ✅ Válido (${mavericks} Mavericks, ${broncos} Broncos)`;
+            } catch (error) {
+                return `${row[1] || 'N/A'}: ❌ ${error.message}`;
+            }
+        });
+
+        resultsDiv.innerHTML = results.join('<br>');
+        
+        let acomodosHTML = '<br><strong>Totales por tipo de acomodo:</strong><br>';
+        for (const [tipo, cantidad] of Object.entries(conteoAcomodos)) {
+            acomodosHTML += `${cantidad} de ${tipo}<br>`;
+        }
+
+        resumenDiv.innerHTML = `
+            <strong>Resumen:</strong><br>
+            🟦 Mavericks: ${totalMavericks}<br>
+            🟥 Broncos: ${totalBroncos}<br>
+            ⚪ Total VINs: ${totalMavericks + totalBroncos}<br>
+            🚚 Total de nodrizas válidas: ${totalNodrizas}
+            <br><br>
+            ${acomodosHTML}
+        `;
+
+        // Alerta si hay duplicados
+        if (nodrizasDuplicadas.size > 0) {
+            alert('¡Atención! Las siguientes nodrizas están duplicadas:\n' + Array.from(nodrizasDuplicadas).join('\n'));
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const boton = document.getElementById('validateButton');
+        if (boton) {
+            boton.addEventListener('click', ejecutarValidacion);
+        }
+        // Funcionalidad para el botón Limpiar
+        const botonLimpiar = document.getElementById('clearButton');
+        if (botonLimpiar) {
+            botonLimpiar.addEventListener('click', () => {
+                document.getElementById('inputData').value = '';
+                document.getElementById('resumen').innerHTML = '';
+                document.getElementById('results').innerHTML = '';
+            });
+        }
+    });
+    </script>
+</body>
+</html> 

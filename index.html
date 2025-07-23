@@ -1,86 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Biblioteca de Macros</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - FRNK APPS</title>
+  <link rel="stylesheet" href="macro-style.css">
   <style>
-    /* Reset básico */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; display: flex; height: 100vh; overflow: hidden; }
-    /* Sidebar */
-    .sidebar { width: 250px; background-color: #1f2937; color: #fff; flex-shrink: 0; display: flex; flex-direction: column; }
-    .sidebar h2 { padding: 1rem; text-align: center; background-color: #111827; font-size: 1.25rem; }
-    .sidebar ul { list-style: none; flex-grow: 1; overflow-y: auto; }
-    .sidebar li { border-bottom: 1px solid #374151; }
-    .sidebar li button { width: 100%; text-align: left; padding: 0.75rem 1rem; background: none; border: none; color: inherit; cursor: pointer; font-size: 1rem; }
-    .sidebar li button.active { background-color: #374151; }
-    .sidebar li button:hover { background-color: #374151; }
-    /* Main content */
-    .main { flex-grow: 1; padding: 1rem; overflow-y: auto; background-color: #f3f4f6; }
-    .macro-frame { width: 100%; height: calc(100vh - 2rem); border: none; }
+    .login-container {
+      max-width: 350px;
+      margin: 80px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2d3a4a;
+    }
+    .login-container label {
+      margin-bottom: 0.3rem;
+      color: #444;
+      font-weight: 500;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      padding: 0.7rem;
+      border: 1px solid #bfc7d1;
+      border-radius: 6px;
+      margin-bottom: 1.1rem;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .login-container input:focus {
+      border-color: #0078d4;
+    }
+    .login-container button {
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .login-container button:hover {
+      background: #005fa3;
+    }
+    .login-error {
+      color: #c00;
+      text-align: center;
+      margin-bottom: 0.7rem;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <h2>Macros</h2>
-    <ul>
-      <li><button data-macro="billMercancia">99. BILLTRKR1_MERCANCIA</button></li>
-      <li><button data-macro="billRegimen">99. BILLTRKR1_REGIMEN_CCP</button></li>
-      <li><button data-macro="billTimbrarTA">99. BILLTRKR1_TIMBRAR_TA</button></li>
-      <li><button data-macro="billTimbrarTD">99. BILLTRKR1_TIMBRAR_TD</button></li>
-      <li><button data-macro="fileMercancia">99. FILE_MERCANCIA_CCP</button></li>
-      <li><button data-macro="opcarmpVins">99. OPCARMP_VINS</button></li>
-      <li><button data-macro="opcarshSend996">99. OPCARSH_SEND_996</button></li>
-    </ul>
-  </nav>
-
-  <!-- Main content -->
-  <section class="main">
-    <iframe id="macroFrame" class="macro-frame"></iframe>
-  </section>
-
+  <div class="login-container">
+  <img src="logo.jpeg" alt="Logo" style="display:block;margin:0 auto 1.2rem auto;max-width:110px;width:60%;height:auto;border-radius:12px;box-shadow:0 2px 8px #11182711;object-fit:contain;background:#f3f4f6;" />
+    <h2>Iniciar Sesión</h2>
+    <div id="loginError" class="login-error">Usuario o contraseña incorrectos</div>
+    <label for="username">Usuario</label>
+    <input type="text" id="username" autocomplete="username" placeholder="Usuario" required>
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" autocomplete="current-password" placeholder="Contraseña" required>
+    <button id="loginBtn">Entrar</button>
+  </div>
   <script>
-    // Mapea cada key a su archivo HTML (sin codificar espacios)
-    const macroFiles = {
-      billMercancia: "99. BILLTRKR1_MERCANCIA.html",
-      billRegimen:   "99. BILLTRKR1_REGIMEN_CCP.html",
-      billTimbrarTA: "99. BILLTRKR1_TIMBRAR_TA.html",
-      billTimbrarTD: "99. BILLTRKR1_TIMBRAR_TD.html",
-      fileMercancia: "99. FILE_MERCANCIA_CCP.html",
-      opcarmpVins:   "99. OPCARMP_VINS.html",
-      opcarshSend996:"99. OPCARSH_SEND_996.html"
-    };
-
-    const frame = document.getElementById('macroFrame');
-    const buttons = document.querySelectorAll('.sidebar button');
-
-    function loadMacro(key, btn) {
-      // Desactivar todos
-      buttons.forEach(b => b.classList.remove('active'));
-      // Activar actual
-      btn.classList.add('active');
-      // Cargar
-      const url = macroFiles[key];
-      if (url) {
-        frame.src = url;
+    // Cambia estos valores para "usuarios válidos"
+    const VALID_USER = "patron";
+    const VALID_PASS = "0000";
+    document.getElementById('loginBtn').addEventListener('click', function() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+      const errorDiv = document.getElementById('loginError');
+      if (user === VALID_USER && pass === VALID_PASS) {
+        // Guarda sesión en localStorage
+        localStorage.setItem('frnk_logged_in', '1');
+        window.location.href = "100. Main.html";
       } else {
-        console.error(`No hay archivo para la macro '${key}'`);
+        errorDiv.style.display = 'block';
       }
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const key = btn.getAttribute('data-macro');
-        loadMacro(key, btn);
-      });
     });
-
-    // Carga inicial por defecto
-    document.addEventListener('DOMContentLoaded', () => {
-      const first = buttons[0];
-      loadMacro(first.getAttribute('data-macro'), first);
+    // Si ya está logueado, redirige directo
+    if (localStorage.getItem('frnk_logged_in') === '1') {
+      window.location.href = "100. Main.html";
+    }
+    // Enter para enviar
+    document.getElementById('password').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') document.getElementById('loginBtn').click();
     });
   </script>
 </body>

@@ -4,75 +4,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de Macro por Lotes</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
-      margin-bottom: 1rem;
-      font-family: monospace;
-      font-size: 14px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 0.5rem 0;
-      cursor: pointer;
-    }
-    #outputContainer {
-      margin-top: 2rem;
-    }
-    #output {
-      white-space: pre-wrap;
-      background: #fff;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      min-height: 200px;
-      overflow: auto;
-      max-height: 400px;
-    }
-  </style>
+  <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
-  <h1>Generador de Macro por Lotes</h1>
-  <p>Pega aquí tu listado de valores (formato: CÓDIGO\tVALOR):</p>
-  <textarea id="inputList" placeholder="241431\tR090158\n..."></textarea>
-  <br>
-  <button onclick="generateMacro()">GENERAR MACRO</button>
-  <button onclick="copyMacro()">COPIAR MACRO</button>
-
-  <div id="outputContainer">
-    <h2>Previsualización del Macro</h2>
+  <div class="container">
+    <h1>GENERADOR DE MACRO PARA TIMBRAR DESPACHO 0</h1>
+    <p>Pega el tracto seguido de la Rbill en forma de lista:</p>
+    <textarea id="inputList" placeholder="241431 R090158
+210530 R090115"></textarea>
+    <div class="button-row">
+      <button id="generateBtn">GENERAR</button>
+      <button id="copyBtn">COPIAR</button>
+      <button id="clearBtn">LIMPIAR</button>
+    </div>
+    <h2>PREVISUALIZACION:</h2>
     <div id="output"></div>
   </div>
 
+
   <script>
     function generateMacro() {
-      const input = document.getElementById("inputList").value.trim().split("\n");
+      const input = document.getElementById("inputList").value.trim().split(/\r?\n/).filter(l => l);
+      if (input.length === 0) {
+        alert("¡Debes ingresar datos!");
+        return;
+      }
+
       let bloques = input.map((line, i) => {
-        const [codigo, valor] = line.split("\t");
+        const [codigo, valor] = line.split(/\s+/);
+        if (!codigo || !valor) {
+          alert(`La línea ${i+1} no tiene todos los valores requeridos.`);
+          return null;
+        }
         const base = 1 + i * 10;
         const haySiguiente = i < input.length - 1;
         const siguienteBase = base + 10;
         return generarBloque(codigo, valor, base, haySiguiente, siguienteBase);
-      }).join("\n\n");
+      }).filter(Boolean).join("\n\n");
 
-      const contenido = `<HAScript name="macro_lote" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Jun 23, 2025 11:45:57 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">
-
-${bloques}
-
-</HAScript>`;
+      const contenido = `<HAScript name=\"macro_lote\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"florf\" creationdate=\"Jun 23, 2025 11:45:57 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepauseforenhancedtn=\"true\" continueontimeout=\"false\">\n\n${bloques}\n\n</HAScript>`;
       document.getElementById("output").textContent = contenido;
     }
 
@@ -113,24 +83,28 @@ ${bloques}
         }
 
         return `<screen name="Screen${base + idx}" entryscreen="${idx === 0}" exitscreen="${exitscreen}" transient="false">
-  <description >
-    ${descriptionLines.join("\n    ")}
-  </description>
-  <actions>
-    <input value="${inputValue}" row="0" col="0" movecursor="true" />
-  </actions>
-  <nextscreens timeout="0" >${nextScreen}
-  </nextscreens>
-</screen>`;
+    <description >
+      ${descriptionLines.join("\n    ")}
+    </description>
+    <actions>
+      <input value="${inputValue}" row="0" col="0" movecursor="true" />
+    </actions>
+    <nextscreens timeout="0" >${nextScreen}
+    </nextscreens>
+  </screen>`;
       }).join("\n\n");
     }
 
-    function copyMacro() {
-      const outputText = document.getElementById("output").textContent;
+    document.getElementById('generateBtn').addEventListener('click', generateMacro);
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const outputText = document.getElementById('output').textContent;
       navigator.clipboard.writeText(outputText).then(() => {
-        alert("Macro copiado al portapapeles");
+        alert('¡Macro copiado al portapapeles!');
       });
-    }
+    });
+    document.getElementById('clearBtn').addEventListener('click', function() {
+      document.getElementById('output').textContent = '';
+    });
   </script>
 
 

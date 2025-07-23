@@ -5,109 +5,76 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de Macros HAScript</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    textarea { width: 100%; height: 150px; font-family: monospace; margin-bottom: 10px; }
-    pre { background: #f4f4f4; padding: 10px; overflow: auto; white-space: pre-wrap; }
-    button { padding: 8px 16px; margin-right: 10px; }
-  </style>
+  <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
-  <h1>Generador Automático de Macros HAScript</h1>
-  <p>Pega tu listado (VIN, B, CÓDIGO, CANTIDAD, REFERENCIA) separado por tabuladores o espacios, una línea por registro:</p>
-  <textarea id="inputList" placeholder="3FTCW8TA7SRA92287	b	000003	56	N018539"></textarea>
-  <div>
-    <button id="generate">Generar Macro</button>
-    <button id="copy">Copiar al Portapapeles</button>
-    <button id="Clear">limpiar</button>
+  <div class="container">
+    <h1>GENERADOR DE MACRO PARA ENVIAR 966 COPAC S: 73/3</h1>
+    <p>Pega el listado separado por espacios, una línea por VIN:</p>
+    <textarea id="inputList" placeholder="3FTCW8TA7SRA92287	B	000003	56	N018539"></textarea>
+    <div class="button-row">
+      <button id="generate">GENERAR</button>
+      <button id="copy">COPIAR</button>
+      <button id="Clear">LIMPIAR</button>
+    </div>
+    <div class="preview-label">PREVISUALIZACION:</div>
+    <pre id="output"></pre>
   </div>
-  <h2>Previsualización:</h2>
-  <pre id="output"></pre>
-
   <script>
     document.getElementById('generate').addEventListener('click', () => {
-      const lines = document.getElementById('inputList').value.split(/\r?\n/).filter(l => l.trim());
+      const lines = document.getElementById('inputList').value.split(/\\r?\\n/).filter(l => l.trim());
       let screenCount = 1;
       const macroLines = [];
-      // Inicio del script HAScript
-      macroLines.push(`<HAScript name="rt_secuencial" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="frank" creationdate="Jul 2, 2025 09:00:00 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">`);
-
+      macroLines.push(`<HAScript name=\"rt_secuencial\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"frank\" creationdate=\"Jul 2, 2025 09:00:00 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">`);
       lines.forEach((line, index) => {
-        const parts = line.trim().split(/\s+/);
+        const parts = line.trim().split(/\\s+/);
         if (parts.length < 5) return;
         const [vin, b, code, qty, ref] = parts;
         const isFirst = index === 0;
         const isLast = index === lines.length - 1;
-
-        // Pantalla 1: VIN
-        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="${isFirst}" exitscreen="false" transient="false">`);
-        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/></description>`);
-        macroLines.push(`        <actions><input value="${vin}[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
-        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
+        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"${isFirst}\" exitscreen=\"false\" transient=\"false\">`);
+        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/></description>`);
+        macroLines.push(`        <actions><input value=\"${vin}[enter]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
+        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-
-        // Pantalla 2: PF8
-        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="false" transient="false">`);
-        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/><numfields number="74" optional="true" invertmatch="false"/></description>`);
-        macroLines.push(`        <actions><input value="[pf8]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
-        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
+        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"false\" transient=\"false\">`);
+        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/><numfields number=\"74\" optional=\"true\" invertmatch=\"false\"/></description>`);
+        macroLines.push(`        <actions><input value=\"[pf8]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
+        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-
-        // Pantalla 3: Datos
-        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="false" transient="false">`);
-        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/><numfields number="50" optional="true" invertmatch="false"/></description>`);
-        macroLines.push(`        <actions><input value="${b}[tab][tab][tab]${code}${qty}${ref}[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
-        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
+        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"false\" transient=\"false\">`);
+        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/><numfields number=\"50\" optional=\"true\" invertmatch=\"false\"/></description>`);
+        macroLines.push(`        <actions><input value=\"${b}[tab][tab][tab]${code}${qty}${ref}[pf5]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
+        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-
-        // Pantalla 4: Confirmación
-        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="false" transient="false">`);
-        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/></description>`);
-        macroLines.push(`        <actions><input value="[field+][enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
-        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
+        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"false\" transient=\"false\">`);
+        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/></description>`);
+        macroLines.push(`        <actions><input value=\"[field+][enter]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
+        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-
-        // Pantalla 5: Salida o siguiente bloque
-        let line5 = `    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="${isLast}" transient="false">`;
+        let line5 = `    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"${isLast}\" transient=\"false\">`;
         macroLines.push(line5);
-        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/></description>`);
-        macroLines.push(`        <actions><input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
+        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/></description>`);
+        macroLines.push(`        <actions><input value=\"[enter]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
         if (!isLast) {
-          macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
+          macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
         }
         macroLines.push(`    </screen>`);
         screenCount++;
       });
-
-      // Cerrar HAScript
       macroLines.push(`</HAScript>`);
-      document.getElementById('output').textContent = macroLines.join('\n');
+      document.getElementById('output').textContent = macroLines.join('\\n');
     });
-
     document.getElementById('copy').addEventListener('click', () => {
       const text = document.getElementById('output').textContent;
       navigator.clipboard.writeText(text).then(() => alert('Macro copiado al portapapeles'))
                                     .catch(err => alert('Error al copiar: '+err));
     });
-  </script>
-  
-<script>
-  // Espera a que cargue el DOM
-  document.addEventListener('DOMContentLoaded', function() {
-    // Selecciona el botón y el área de salida
-    const btnClear = document.getElementById('Clear');
-    const output = document.getElementById('output');
-
-    // Al hacer clic, vacía el contenido de <pre>
-    btnClear.addEventListener('click', () => {
-      output.textContent = '';
+    document.getElementById('Clear').addEventListener('click', () => {
+      document.getElementById('output').textContent = '';
     });
-  });
-</script>
-
-
-</body></html>
+  </script></html>

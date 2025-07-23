@@ -4,29 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de Macro Timbrado</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; max-width: 900px; margin: auto; }
-    h1 { text-align: center; color: #333; }
-    textarea { width: 100%; height: 120px; padding: 10px; margin-bottom: 1rem; font-family: monospace; font-size: 14px; }
-    button { padding: 10px 20px; font-size: 16px; margin: 0.5rem 0; cursor: pointer; }
-    #outputContainer { margin-top: 2rem; }
-    #output { white-space: pre-wrap; background: #fff; padding: 1rem; border: 1px solid #ccc; min-height: 200px; overflow: auto; max-height: 400px; }
-    label { font-weight: bold; }
-  </style>
+  <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
-  <h1>Generador de Macro Timbrado</h1>
-  <p>Pega aquí tu listado de valores (uno por línea), que reemplazarán el valor de pantalla 1:</p>
-  <textarea id="inputList" placeholder="R090538\nR090539\n..."></textarea>
-  <br>
-  <button onclick="generateMacro()">GENERAR MACRO</button>
-  <button onclick="copyMacro()">COPIAR MACRO</button>
-
-  <div id="outputContainer">
-    <h2>Previsualización del Macro</h2>
+  <div class="container">
+    <h1>GENERADOR DE MACRO PARA TIMBRAR DESPACHO NORMAL</h1>
+    <p>Pega el Rbill en forma de lista:</p>
+    <textarea id="inputList" placeholder="R090538
+R090539"></textarea>
+      <div class="button-row">
+      <button id="generateBtn">GENERAR</button>
+      <button id="copyBtn">COPIAR</button>
+      <button id="clearBtn">LIMPIAR</button>
+    </div>
+    <h2>PREVISUALIZACION:</h2>
     <div id="output"></div>
   </div>
-
   <script>
     // Genera un screen con enlace siempre al siguiente, y marca exitscreen solo en el último global
     const screenTemplate = (code, index, total) => {
@@ -78,6 +71,16 @@ ${nextScreenTag}
       const text = document.getElementById('output').textContent;
       navigator.clipboard.writeText(text).then(() => alert('Macro copiado al portapapeles'));
     }
+      document.getElementById('generateBtn').addEventListener('click', generateMacro);
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const outputText = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(outputText).then(() => {
+        alert('¡Macro copiado al portapapeles!');
+      });
+    });
+    document.getElementById('clearBtn').addEventListener('click', function() {
+      document.getElementById('output').textContent = '';
+    });
   </script>
 
 </body>

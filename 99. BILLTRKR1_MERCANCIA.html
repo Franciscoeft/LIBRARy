@@ -4,31 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Generador de Macro 'MERCANCIA DE 7'</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1 { text-align: center; color: #333; }
-    textarea { width: 100%; padding: 10px; margin-bottom: 1rem; font-family: monospace; font-size: 14px; }
-    #listInput { height: 150px; }
-    #output { white-space: pre-wrap; background: #fff; padding: 1rem; border: 1px solid #ccc; min-height: 300px; overflow: auto; max-height: 600px; }
-    button { padding: 10px 20px; font-size: 16px; margin-right: 0.5rem; cursor: pointer; }
-  </style>
+  <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
-  <h1>Generador de Macro 'MERCANCIA DE 7'</h1>
-  <p>Pega tu listado de valores (cada línea en formato):</p>
-  <pre>Mxxxxxxx PAR</pre>
-  <textarea id="listInput" placeholder="M652540 7\nM652545 7"></textarea>
-  <button onclick="generateMacro()">GENERAR MACRO</button>
-  <button onclick="copyMacro()">COPIAR MACRO</button>
-  <button onclick="clearOutput()">LIMPIAR PREVISUALIZACIÓN</button>
-  <h2>Macro Generado:</h2>
-  <pre id="output"></pre>
+  <div class="container">
+    <h1>GENERADOR DE MACRO PARA MERCANCIA MASIVA</h1>
+    <p>Pega el listado de ordenes para generar el macro (una orden por linea):</p>
+    <textarea id="listInput" placeholder= "M652540 7
+M652545 7"></textarea>
+    <div class="button-row">
+      <button onclick="generateMacro()">GENERAR</button>
+      <button onclick="copyMacro()">COPIAR</button>
+      <button onclick="clearOutput()">LIMPIAR</button>
+    </div>
+    <h2>PREVISUALIZACION:</h2>
+    <pre id="output"></pre>
+  </div>
 
   <script>
     function generateMacro() {

@@ -4,44 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FRNK APPS - Generar Macro</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 2rem; }
-    h1 { margin-bottom: 1rem; }
-    textarea, input, button, select {
-      width: 100%; margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;
-    }
-    #output {
-      white-space: pre;
-      background: #fff;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      overflow: auto;
-      max-height: 300px;
-    }
-    a#downloadLink {
-      display: none;
-      margin-top: 0.5rem;
-      text-decoration: none;
-      background: #007BFF;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-    }
-  </style>
+  <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
 
-<h1>🛠️ FRNK APPS – Generar Macro</h1>
-
-<section id="macro">
-  <h2>🚗 MacroBot Frank</h2>
-  <p>Sube un archivo <strong>.txt</strong> con un VIN y un CÓDIGO por línea (separados por tabulación).</p>
-  <input type="file" id="fileInput" accept=".txt">
-  <button onclick="generarMacro()">GENERAR MACRO ARMADO</button>
-  <a id="downloadLink" download="macro_vins_generado.mac">⬇ Descargar Macro .mac</a>
-  <h3>Vista previa:</h3>
-  <div id="output"></div>
-</section>
+  <div class="container">
+    <h1>GENERADOR DE MACRO PARA VINS FORD</h1>
+    <p>Sube un archivo <strong>.txt</strong> con el listado de VINS y destino. </p>
+<p>Ejemplo: 3FTCW8PA8SRA92888 FDFV000001</p>
+   
+    <input type="file" id="fileInput" accept=".txt">
+    <div class="button-row">
+      <button onclick="generarMacro()">GENERAR</button>
+      <a id="downloadLink" download="VIN_FORD.mac">DESCARGAR MACRO</a>
+    </div>
+    <h3>PREVISUALIZACION:</h3>
+    <div id="output"></div>
+  </div>
 
 <script>
 function generarMacro() {

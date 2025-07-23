@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LIBRARy</title>
+  <style>
+    /* Reset básico */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(120deg, #f3f4f6 0%, #e0e7ef 100%);
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 270px;
+      background: linear-gradient(160deg, #1f2937 60%, #374151 100%);
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(31,41,55,0.08);
+      border-top-right-radius: 18px;
+      border-bottom-right-radius: 18px;
+    }
+    .sidebar h2 {
+      padding: 1.2rem 1rem;
+      text-align: center;
+      background: linear-gradient(90deg, #111827 80%, #374151 100%);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      border-top-right-radius: 18px;
+    }
+    .sidebar ul {
+      list-style: none;
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+    .sidebar li {
+      border-bottom: 1px solid #37415144;
+      transition: background 0.2s;
+    }
+    .sidebar li:last-child {
+      border-bottom: none;
+    }
+    .sidebar li button {
+      width: 100%;
+      text-align: left;
+      padding: 0.85rem 1.2rem;
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 1.08rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s, font-weight 0.2s;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .sidebar li button.active {
+      background: linear-gradient(90deg, #2563eb 60%, #1e40af 100%);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #2563eb22;
+    }
+    .sidebar li button:hover {
+      background: #374151cc;
+      color: #a5b4fc;
+    }
+    /* Main content */
+    .main {
+      flex-grow: 1;
+      padding: 2.2rem 2.5rem 2.2rem 2rem;
+      overflow-y: auto;
+      background: linear-gradient(120deg, #f3f4f6 60%, #e0e7ef 100%);
+      border-radius: 18px;
+      margin: 1.2rem 1.2rem 1.2rem 0.5rem;
+      box-shadow: 0 4px 24px #1e293b11;
+      min-width: 0;
+    }
+    .macro-frame {
+      width: 100%;
+      height: calc(100vh - 4.4rem);
+      border: none;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 12px #1e293b0a;
+      transition: box-shadow 0.2s;
+    }
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: #e5e7eb;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 6px;
+    }
+    ::selection {
+      background: #2563eb33;
+    }
+    @media (max-width: 700px) {
+      .sidebar { width: 100px; }
+      .sidebar h2 { font-size: 1rem; padding: 0.7rem; }
+      .sidebar li button { font-size: 0.9rem; padding: 0.6rem 0.5rem; }
+      .main { padding: 1rem 0.5rem; margin: 0.5rem; }
+      .macro-frame { height: 60vh; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h2>MACROS</h2>
+    <ul>
+
+      <li><button data-macro="verificadorAcomodos">VERIFICADOR ACOMODOS</button></li>
+      <li><button data-macro="billMercancia">MERCANCIA MASIVA</button></li>
+      <li><button data-macro="billRegimen">REGIMEN MASIVO</button></li>
+      <li><button data-macro="billTimbrarTA">TIMBRAR TRASLADO</button></li>
+      <li><button data-macro="billTimbrarTD">TIMBRAR DESPACHADO</button></li>
+      <li><button data-macro="opcarmpVins">INGRESAR VINS</button></li>
+      <li><button data-macro="opcarshSend996">ENVIO DE 996 COPAC</button></li>
+
+    </ul>
+    <div style="flex-grow:1"></div>
+    <button id="logoutBtn" style="margin:1.2rem 1rem 1.5rem 1rem;padding:0.7rem 0;font-size:1.08rem;background:#fff;color:#1f2937;border:none;border-radius:6px;box-shadow:0 2px 8px #11182711;cursor:pointer;font-weight:600;transition:background 0.2s;">Cerrar sesión</button>
+  </nav>
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      // Simula logout: redirige a login.html
+      window.location.href = 'login.html';
+    });
+  </script>
+
+  <!-- Main content -->
+  <section class="main">
+    <iframe id="macroFrame" class="macro-frame"></iframe>
+  </section>
+
+  <script>
+    // Bloqueo de acceso si no hay sesión
+    if (localStorage.getItem('frnk_logged_in') !== '1') {
+      window.location.href = 'login.html';
+    }
+
+    // Mapea cada key a su archivo HTML (sin codificar espacios)
+    const macroFiles = {
+      verificadorAcomodos: "99. VERIFICADOR_ACOMODOS.html",
+      billMercancia: "99. BILLTRKR1_MERCANCIA.html",
+      billRegimen:   "99. BILLTRKR1_REGIMEN_CCP.html",
+      billTimbrarTA: "99. BILLTRKR1_TIMBRAR_TA.html",
+      billTimbrarTD: "99. BILLTRKR1_TIMBRAR_TD.html",
+      opcarmpVins:   "99. OPCARMP_VINS.html",
+      opcarshSend996:"99. OPCARSH_SEND_996.html"
+    };
+
+    const frame = document.getElementById('macroFrame');
+    const buttons = document.querySelectorAll('.sidebar button');
+
+    function loadMacro(key, btn) {
+      // Desactivar todos
+      buttons.forEach(b => b.classList.remove('active'));
+      // Activar actual
+      btn.classList.add('active');
+      // Cargar
+      const url = macroFiles[key];
+      if (url) {
+        frame.src = url;
+      } else {
+        console.error(`No hay archivo para la macro '${key}'`);
+      }
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-macro');
+        loadMacro(key, btn);
+      });
+    });
+
+    // Carga inicial por defecto
+    document.addEventListener('DOMContentLoaded', () => {
+      const first = buttons[0];
+      loadMacro(first.getAttribute('data-macro'), first);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      // Elimina la sesión y redirige
+      localStorage.removeItem('frnk_logged_in');
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
