@@ -1,3 +1,0 @@
-# LIBRARY OF MACROS 
-
-*TEST*
