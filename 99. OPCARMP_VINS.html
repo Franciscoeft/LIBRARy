@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FRNK APPS - Generar Macro</title>
+  <title>INGRESAR VINS AUTO</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
 
   <div class="container">
-    <h1>GENERADOR DE MACRO PARA VINS FORD</h1>
+    <h1>MACRO AUTOMATIZADO PARA INGRESO DE VINS</h1>
     <p>Sube un archivo <strong>.txt</strong> con el listado de VINS y destino. </p>
 <p>Ejemplo: 3FTCW8PA8SRA92888 FDFV000001</p>
    
@@ -32,7 +32,7 @@ function generarMacro() {
 
   reader.onload = function (e) {
     const lines = e.target.result.trim().split(/\r?\n/).filter(l => l);
-    let macro = `<HAScript name="macro_vins_lineal" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="frank" creationdate="Jun 19, 2025" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">`;
+    let macro = `<HAScript name="INGRESO AUTO DE VINS" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="frank" creationdate="Jun 19, 2025" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">`;
 
     lines.forEach((line, i) => {
       const [vin, codigo] = line.split("\t");
@@ -78,3 +78,4 @@ function generarMacro() {
 
 </body>
 </html>
+
