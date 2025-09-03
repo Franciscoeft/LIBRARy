@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Macro HAScript "Timbrado Foraneo"</title>
+  <title>MACRO AUTO PARA TIMBRADO FORANEO</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
@@ -159,7 +159,7 @@
         .trim().split(/\r?\n/)
         .filter(l => /^M/.test(l));
       const total = lines.length;
-      let content = `<HAScript name="Timbrado_foraneo" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Sep 2, 2025 10:56:59 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
+      let content = `<HAScript name="TIMBRADO AUTO FORANEO" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Sep 2, 2025 10:56:59 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
       lines.forEach((code, idx) => {
         content += generateBlock(code, idx, total) + '\n';
       });
