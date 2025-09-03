@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Macro con Ordenes 'M'</title>
+</head>
+<body>
+  <div class="container">
+    <h1>GENERADOR DE MACRO PARA ORDENES CON 'M'</h1>
+    <p>Pega la lista de ordenes que comienzan con 'M':</p>
+    <textarea id="inputList" placeholder="M650780\nM650781"></textarea>
+    <div class="button-row">
+      <button id="generateBtn">GENERAR</button>
+      <button id="copyBtn">COPIAR</button>
+      <button id="clearBtn">LIMPIAR</button>
+    </div>
+    <h2>PREVISUALIZACIÓN DEL MACRO:</h2>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    // Genera un bloque de pantallas HAScript para cada orden M, con todas las acciones
+    function generateBlock(code, idx, total) {
+      const prefix = `B${idx}_`;
+      const nextPrefix = idx < total - 1 ? `B${idx + 1}_` : null;
+      const isLast = idx === total - 1;
+      return `
+    <!-- Bloque para orden ${code} -->
+    <screen name="${prefix}Screen1" entryscreen="${idx === 0}" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="${code}" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[enter]" row="0" col="0" movecursor="false" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen2" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen2" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="i[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen3" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen3" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="1[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen4" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen4" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="[pf12]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen5" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen5" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen6" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen6" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="h[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen7" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen7" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <boxselection type="SELECT" srow="14" scol="48" erow="14" ecol="54" />
+        <input value="[copy]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <boxselection type="DESELECT" />
+        <input value="[enter]" row="0" col="0" movecursor="false" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen8" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen8" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen9" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen9" entryscreen="false" exitscreen="false" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="[enter]" row="0" col="0" movecursor="false" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        <nextscreen name="${prefix}Screen10" />
+      </nextscreens>
+    </screen>
+
+    <screen name="${prefix}Screen10" entryscreen="false" exitscreen="${isLast}" transient="false">
+      <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+      </description>
+      <actions>
+        <input value="[pf10]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      </actions>
+      <nextscreens timeout="0">
+        ${isLast ? '' : `<nextscreen name="${nextPrefix}Screen1" />`}
+      </nextscreens>
+    </screen>`;
+    }
+
+    // Ensambla el HAScript completo con todos los bloques consecutivos
+    function generateMacro() {
+      const lines = document.getElementById('inputList').value
+        .trim().split(/\r?\n/)
+        .filter(l => /^M/.test(l));
+      const total = lines.length;
+      let content = `<HAScript name="Timbrado_foraneo" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Sep 2, 2025 10:56:59 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
+      lines.forEach((code, idx) => {
+        content += generateBlock(code, idx, total) + '\n';
+      });
+      content += '</HAScript>';
+      document.getElementById('output').textContent = content;
+    }
+
+    // Eventos de botones
+    document.getElementById('generateBtn').addEventListener('click', generateMacro);
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('output').textContent)
+        .then(() => alert('¡Macro copiado al portapapeles!'));
+    });
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      document.getElementById('output').textContent = '';
+    });
+  </script>
+</body>
+</html>
