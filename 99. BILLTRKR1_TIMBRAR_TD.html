@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Macro Timbrado</title>
+  <title>MACRO AUTO PARA DESPACHO DESPACHADO CRUCE</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
@@ -55,7 +55,7 @@ ${nextScreenTag}
       const lines = document.getElementById('inputList').value
         .trim().split(/\r?\n/).filter(l => l);
       const totalScreens = lines.length * 7;
-      let content = `<HAScript name=\"timbrado t\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"florf\" creationdate=\"Jul 3, 2025 9:23:12 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">\n\n`;
+      let content = `<HAScript name=\"TIMBRADO DESPACHADO CRUCE\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"florf\" creationdate=\"Jul 3, 2025 9:23:12 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">\n\n`;
       let screenCount = 0;
       lines.forEach(code => {
         for (let i = 1; i <= 7; i++) {
@@ -85,3 +85,4 @@ ${nextScreenTag}
 
 </body>
 </html>
+
