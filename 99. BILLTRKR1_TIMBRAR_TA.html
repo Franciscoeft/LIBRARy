@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<!-- saved from url=(0036)https://franciscoeft.github.io/ccp1/ -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Macro por Lotes</title>
+  <title>TIMBRADO AUTO CON DESPACHO 0</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
@@ -42,7 +41,7 @@
         return generarBloque(codigo, valor, base, haySiguiente, siguienteBase);
       }).filter(Boolean).join("\n\n");
 
-      const contenido = `<HAScript name=\"macro_lote\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"florf\" creationdate=\"Jun 23, 2025 11:45:57 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepauseforenhancedtn=\"true\" continueontimeout=\"false\">\n\n${bloques}\n\n</HAScript>`;
+      const contenido = `<HAScript name=\"TIMBRADO DESPACHO 0\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"florf\" creationdate=\"Jun 23, 2025 11:45:57 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepauseforenhancedtn=\"true\" continueontimeout=\"false\">\n\n${bloques}\n\n</HAScript>`;
       document.getElementById("output").textContent = contenido;
     }
 
