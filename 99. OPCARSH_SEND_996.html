@@ -4,7 +4,7 @@
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Macros HAScript</title>
+  <title>MACRO PARA ENVIO DE 996 COPAC</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
@@ -25,7 +25,7 @@
       const lines = document.getElementById('inputList').value.split(/\\r?\\n/).filter(l => l.trim());
       let screenCount = 1;
       const macroLines = [];
-      macroLines.push(`<HAScript name=\"rt_secuencial\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"frank\" creationdate=\"Jul 2, 2025 09:00:00 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">`);
+      macroLines.push(`<HAScript name=\"ENVIO 996 AUTO\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"frank\" creationdate=\"Jul 2, 2025 09:00:00 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">`);
       lines.forEach((line, index) => {
         const parts = line.trim().split(/\\s+/);
         if (parts.length < 5) return;
