@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Macro HAScript "exd"</title>
+  <title>GENERADOR DE MACRO PARA REGIMEN AUTO</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
   <div class="container">
-    <h1>GENERADOR DE MACRO PARA REGIMEN MASIVO</h1>
+    <h1>GENERADOR DE MACRO PARA REGIMEN AUTOMATIZADO</h1>
     <p>Pega el listado de ordenes para generar el macro (una orden por linea)::</p>
     <textarea id="inputArea" placeholder=
     "M652534
@@ -23,7 +23,7 @@ M652535"></textarea>
   </div>
 
   <script>
-    const header = `<HAScript name="exd" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Jun 30, 2025 8:48:01 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
+    const header = `<HAScript name="REGIMEN AUTO" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="florf" creationdate="Jun 30, 2025 8:48:01 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
     const footer = `</HAScript>`;
 
     const screensBlock = (code, idx, hasNext) => {
