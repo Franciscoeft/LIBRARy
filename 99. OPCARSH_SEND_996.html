@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<!-- saved from url=(0059)file:///C:/Users/florf/Downloads/macro_generator%20(4).html -->
+<!-- sav      const input = document.getElementById('inputList').value;
+       const result = macroLines.join('\n');
+      console.log('Generated macro:', result); // Para debugging
+      document.getElementById('output').textContent = result;    const lines = input.split(/\r?\n/).filter(line => line.trim());
+      console.log('Lines:', lines); // Para debugging
+
+      let screenCount = 1;
+      const macroLines = [];
+      
+      // Inicio del script
+      macroLines.push('<HAScript name="rt_secuencial" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="frank" creationdate="Jul 2, 2025 09:00:00 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">');
+      
+      // Procesar cada línea
+      lines.forEach((line, index) => {
+        console.log('Processing line:', line); // Para debugging
+        const parts = line.trim().split(/\s+/);
+        console.log('Parts:', parts); // Para debugging
+        
+        if (parts.length < 5) {
+            console.log('Skipping line due to insufficient parts');
+            return;
+        } url=(0059)file:///C:/Users/florf/Downloads/macro_generator%20(4).html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MACRO PARA ENVIO DE 996 COPAC</title>
+  <title>Generador de Macros HAScript</title>
   <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
@@ -21,60 +42,81 @@
     <pre id="output"></pre>
   </div>
   <script>
-    document.getElementById('generate').addEventListener('click', () => {
-      const lines = document.getElementById('inputList').value.split(/\\r?\\n/).filter(l => l.trim());
+    document.getElementById('generate').addEventListener('click', function() {
+      console.log('Generate button clicked');
+      const inputValue = document.getElementById('inputList').value;
+      const lines = inputValue.split(/\r?\n/).filter(line => line.trim());
       let screenCount = 1;
       const macroLines = [];
-      macroLines.push(`<HAScript name=\"ENVIO 996 AUTO\" description=\"\" timeout=\"60000\" pausetime=\"300\" promptall=\"true\" blockinput=\"true\" author=\"frank\" creationdate=\"Jul 2, 2025 09:00:00 AM\" supressclearevents=\"false\" usevars=\"false\" ignorepauseforenhancedtn=\"true\" delayifnotenhancedtn=\"0\" ignorepausetimeforenhancedtn=\"true\" continueontimeout=\"false\">`);
+      
+      // Inicio del macro
+      macroLines.push('<HAScript name="ENVIO DE 996 B" description="" timeout="60000" pausetime="300" promptall="true" blockinput="true" author="frank" creationdate="Jul 2, 2025 09:00:00 AM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">');
+      
+      // Procesar cada línea
       lines.forEach((line, index) => {
-        const parts = line.trim().split(/\\s+/);
-        if (parts.length < 5) return;
+        // Dividir la línea en partes, manejando múltiples espacios y tabulaciones
+        const parts = line.trim().split(/[\s\t]+/);
+        if (parts.length < 5) {
+            console.log('Línea ignorada por falta de datos:', line);
+            return;
+        }
+        
+        // Extraer los valores
         const [vin, b, code, qty, ref] = parts;
+        console.log('Procesando:', { vin, b, code, qty, ref });
+        
         const isFirst = index === 0;
         const isLast = index === lines.length - 1;
-        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"${isFirst}\" exitscreen=\"false\" transient=\"false\">`);
-        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/></description>`);
-        macroLines.push(`        <actions><input value=\"${vin}[enter]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
-        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
+        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="${isFirst}" exitscreen="false" transient="false">`);
+        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/></description>`);
+        macroLines.push(`        <actions><input value="${vin}[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
+        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"false\" transient=\"false\">`);
-        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/><numfields number=\"74\" optional=\"true\" invertmatch=\"false\"/></description>`);
-        macroLines.push(`        <actions><input value=\"[pf8]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
-        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
+        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="false" transient="false">`);
+        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/><numfields number="74" optional="true" invertmatch="false"/></description>`);
+        macroLines.push(`        <actions><input value="[pf8]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
+        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"false\" transient=\"false\">`);
-        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/><numfields number=\"50\" optional=\"true\" invertmatch=\"false\"/></description>`);
-        macroLines.push(`        <actions><input value=\"${b}[tab][tab][tab]${code}${qty}${ref}[pf5]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
-        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
+        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="false" transient="false">`);
+        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/><numfields number="50" optional="true" invertmatch="false"/></description>`);
+        macroLines.push(`        <actions><input value="${b}[tab][tab][tab]${code}${qty}${ref}[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
+        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-        macroLines.push(`    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"false\" transient=\"false\">`);
-        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/></description>`);
-        macroLines.push(`        <actions><input value=\"[field+][enter]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
-        macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
+        macroLines.push(`    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="false" transient="false">`);
+        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/></description>`);
+        macroLines.push(`        <actions><input value="[field+][enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
+        macroLines.push(`        <nextscreens timeout="0"><nextscreen name="Screen${screenCount+1}"/></nextscreens>`);
         macroLines.push(`    </screen>`);
         screenCount++;
-        let line5 = `    <screen name=\"Screen${screenCount}\" entryscreen=\"false\" exitscreen=\"${isLast}\" transient=\"false\">`;
+        let line5 = `    <screen name="Screen${screenCount}" entryscreen="false" exitscreen="${isLast}" transient="false">`;
         macroLines.push(line5);
-        macroLines.push(`        <description><oia status=\"NOTINHIBITED\" optional=\"false\" invertmatch=\"false\"/></description>`);
-        macroLines.push(`        <actions><input value=\"[enter]\" row=\"0\" col=\"0\" movecursor=\"true\" xlatehostkeys=\"true\" encrypted=\"false\"/></actions>`);
+        macroLines.push(`        <description><oia status="NOTINHIBITED" optional="false" invertmatch="false"/></description>`);
+        macroLines.push(`        <actions><input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>`);
         if (!isLast) {
           macroLines.push(`        <nextscreens timeout=\"0\"><nextscreen name=\"Screen${screenCount+1}\"/></nextscreens>`);
-        }
+        }   
         macroLines.push(`    </screen>`);
         screenCount++;
       });
-      macroLines.push(`</HAScript>`);
-      document.getElementById('output').textContent = macroLines.join('\\n');
+      macroLines.push('</HAScript>');
+      const finalMacro = macroLines.join('\n');
+      document.getElementById('output').textContent = finalMacro;
     });
-    document.getElementById('copy').addEventListener('click', () => {
+    document.getElementById('copy').addEventListener('click', function() {
       const text = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(text).then(() => alert('Macro copiado al portapapeles'))
-                                    .catch(err => alert('Error al copiar: '+err));
+      if (!text.trim()) {
+        alert('No hay contenido para copiar. Genera el macro primero.');
+        return;
+      }
+      navigator.clipboard.writeText(text)
+        .then(() => alert('Macro copiado al portapapeles'))
+        .catch(err => alert('Error al copiar: ' + err));
     });
-    document.getElementById('Clear').addEventListener('click', () => {
+    document.getElementById('Clear').addEventListener('click', function() {
+      document.getElementById('inputList').value = '';
       document.getElementById('output').textContent = '';
     });
   </script></html>
