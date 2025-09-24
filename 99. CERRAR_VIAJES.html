@@ -3,99 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GENERADOR DE MACRO PARA POR</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f0f0f0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    p {
-      color: #666;
-      margin-bottom: 15px;
-    }
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 14px;
-      resize: vertical;
-      box-sizing: border-box;
-    }
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin: 20px 0;
-      justify-content: center;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    #generateBtn {
-      background-color: #007bff;
-      color: white;
-    }
-    #generateBtn:hover {
-      background-color: #0056b3;
-    }
-    #copyBtn {
-      background-color: #28a745;
-      color: white;
-    }
-    #copyBtn:hover {
-      background-color: #1e7e34;
-    }
-    #clearBtn {
-      background-color: #dc3545;
-      color: white;
-    }
-    #clearBtn:hover {
-      background-color: #c82333;
-    }
-    h2 {
-      color: #333;
-      margin-top: 30px;
-      margin-bottom: 15px;
-    }
-    pre {
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 4px;
-      padding: 15px;
-      overflow-x: auto;
-      font-size: 12px;
-      line-height: 1.4;
-      max-height: 500px;
-      overflow-y: auto;
-    }
-  </style>
+  <title>GENERADOR DE MACRO PARA POR - SISTEMA DE BLOQUES</title>
+  <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
   <div class="container">
-    <h1>GENERADOR DE MACRO PARA POR</h1>
+    <h1>GENERADOR DE MACRO PARA POR - SISTEMA DE BLOQUES</h1>
+    
+    <div class="info-box">
+      <h3>¿Cómo funciona?</h3>
+      <p>Este generador crea un macro que procesa códigos en secuencia. Para cada código:</p>
+      <ul>
+        <li>Ingresa el código en la coordenada 01/008</li>
+        <li>Ejecuta toda la secuencia (EMAZ, coordenadas, páginas, etc.)</li>
+        <li>Al finalizar hace PF3 y pasa al siguiente código</li>
+        <li>El último código termina el script normalmente</li>
+      </ul>
+    </div>
+
     <p>Pega el listado de códigos para generar el macro (un código por línea):</p>
     <textarea id="inputArea" placeholder="240092
 222226
@@ -111,7 +36,7 @@
   </div>
 
   <script>
-    const header = `<HAScript name="POR_AUTO" description="Secuencia automatizada para múltiples códigos" timeout="20000" pausetime="300" promptall="true" blockinput="true" author="generator" creationdate="${new Date().toLocaleString()}" supressclearevents="false" usevars="true" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">
+    const header = `<HAScript name="POR_AUTO_BLOCKS" description="Secuencia automatizada con sistema de bloques" timeout="20000" pausetime="300" promptall="true" blockinput="true" author="generator" creationdate="${new Date().toLocaleString()}" supressclearevents="false" usevars="true" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">
 
     <!-- Variables -->
     <vars>
@@ -124,17 +49,16 @@
 
     const footer = `</HAScript>`;
 
-    const createScreenBlock = (codigo, idx, hasNext) => {
-      const nextIdx = idx + 1;
-      
+    const createFirstScreenBlock = (codigo, idx) => {
       return `
-    <!-- Bloque ${idx}: ${codigo} -->
+    <!-- Bloque ${idx}: Inicio con código ${codigo} -->
     <screen name="Screen1_${idx}" entryscreen="${idx === 1 ? 'true' : 'false'}" exitscreen="false" transient="false">
         <description>
             <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
         </description>
         <actions>
-            <input value="'${codigo}'" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="${codigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="'EMAZ  '" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="'E'" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
@@ -142,8 +66,13 @@
         <nextscreens timeout="3000">
             <nextscreen name="VerificaCoordenadas_${idx}" />
         </nextscreens>
-    </screen>
+    </screen>`;
+    };
 
+    const createScreenBlock = (codigo, idx, hasNext) => {
+      const nextIdx = idx + 1;
+      
+      return `
     <screen name="VerificaCoordenadas_${idx}" entryscreen="false" exitscreen="false" transient="false">
         <description>
             <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
@@ -212,7 +141,39 @@
         </actions>
         <nextscreens timeout="1000">
             <nextscreen name="EsperaCursor1042_${idx}" />
-            <nextscreen name="${hasNext ? `Screen1_${nextIdx}` : 'FinDelScript'}" />
+            <nextscreen name="${hasNext ? `PF3YSiguiente_${idx}` : 'FinDelScript'}" />
+        </nextscreens>
+    </screen>`;
+    };
+
+    const createTransitionBlock = (nextCodigo, currentIdx, nextIdx) => {
+      return `
+    <screen name="PF3YSiguiente_${currentIdx}" entryscreen="false" exitscreen="false" transient="false">
+        <description>
+            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+            <cursor row="1" col="42" optional="true" invertmatch="false" />
+        </description>
+        <actions>
+            <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        </actions>
+        <nextscreens timeout="1000">
+            <nextscreen name="IngresaSiguienteCodigo_${nextIdx}" />
+        </nextscreens>
+    </screen>
+
+    <screen name="IngresaSiguienteCodigo_${nextIdx}" entryscreen="false" exitscreen="false" transient="false">
+        <description>
+            <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+        </description>
+        <actions>
+            <input value="${nextCodigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'EMAZ  '" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'E'" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        </actions>
+        <nextscreens timeout="3000">
+            <nextscreen name="VerificaCoordenadas_${nextIdx}" />
         </nextscreens>
     </screen>`;
     };
@@ -266,7 +227,20 @@
       
       codigos.forEach((codigo, index) => {
         const isLast = index === codigos.length - 1;
+        const isFirst = index === 0;
+        
+        // Para el primer código, crear la pantalla inicial
+        if (isFirst) {
+          result += createFirstScreenBlock(codigo, index + 1);
+        }
+        
+        // Crear el bloque completo de procesamiento
         result += createScreenBlock(codigo, index + 1, !isLast);
+        
+        // Si no es el último, crear la transición al siguiente
+        if (!isLast) {
+          result += createTransitionBlock(codigos[index + 1], index + 1, index + 2);
+        }
       });
 
       result += finalScreen;
