@@ -172,11 +172,15 @@
             <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
         </description>
         <actions>
-            <input value="${nextCodigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="'EMAZ  '" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="'E'" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="${codigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <boxselection type="SELECT" srow="7" scol="47" erow="7" ecol="52" />
+            <input value="&apos;[copy]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <boxselection type="DESELECT" />
+            <input value="&apos;[paste]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="&apos;[enter]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="&apos;E&apos;" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="3000">
             <nextscreen name="VerificaCoordenadas_${nextIdx}" />
@@ -277,6 +281,7 @@
   </script>
 </body>
 </html>
+
 
 
 
