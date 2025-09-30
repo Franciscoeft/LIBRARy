@@ -49,6 +49,22 @@
 
     const footer = `</HAScript>`;
 
+    // Secuencia común de inputs para TODOS los bloques
+    function inputCodigo(codigo) {
+      return `
+        <input value="${codigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <boxselection type="SELECT" srow="7" scol="47" erow="7" ecol="52" />
+        <input value="&apos;[copy]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <boxselection type="DESELECT" />
+        <input value="&apos;[paste]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;E&apos;" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+      `;
+    }
+
     const createFirstScreenBlock = (codigo, idx) => {
       return `
     <!-- Bloque ${idx}: Inicio con código ${codigo} -->
@@ -57,17 +73,7 @@
             <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
         </description>
         <actions>
-            <input value="${codigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <boxselection type="SELECT" srow="7" scol="47" erow="7" ecol="52" />
-            <input value="&apos;[copy]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <boxselection type="DESELECT" />
-            <input value="&apos;[paste]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;E&apos;" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-
+            ${inputCodigo(codigo)}
         </actions>
         <nextscreens timeout="3000">
             <nextscreen name="VerificaCoordenadas_${idx}" />
@@ -173,16 +179,7 @@
             <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
         </description>
         <actions>
-            <input value="${codigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <boxselection type="SELECT" srow="7" scol="47" erow="7" ecol="52" />
-            <input value="&apos;[copy]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <boxselection type="DESELECT" />
-            <input value="&apos;[paste]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;E&apos;" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            ${inputCodigo(nextCodigo)}
         </actions>
         <nextscreens timeout="3000">
             <nextscreen name="VerificaCoordenadas_${nextIdx}" />
@@ -205,7 +202,7 @@
     </screen>
 `;
 
-    // Función para validar que el código sea de 6 dígitos
+    // Validar que el código sea de 6 dígitos
     function isValidCode(code) {
       return /^\d{6}$/.test(code.trim());
     }
@@ -283,13 +280,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
