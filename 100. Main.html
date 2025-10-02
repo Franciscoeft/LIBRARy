@@ -136,7 +136,7 @@
   <script>
     document.getElementById('logoutBtn').addEventListener('click', function() {
       // Simula logout: redirige a login.html
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     });
   </script>
 
@@ -148,7 +148,7 @@
   <script>
     // Bloqueo de acceso si no hay sesión
     if (localStorage.getItem('frnk_logged_in') !== '1') {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
 
     // Mapea cada key a su archivo HTML (sin codificar espacios)
@@ -205,6 +205,7 @@
   </script>
 </body>
 </html>
+
 
 
 
