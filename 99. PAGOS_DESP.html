@@ -6,19 +6,21 @@
 <link rel="stylesheet" href="macro-style.css">
 </head>
 <body>
-<h2>Generador de HAScript Pagos</h2>
+<div class="container">
+    <h2>Generador de HAScript Pagos</h2>
 
-</p>"listado">Pega el listado (formato: Carro TAB Tipo 6/7/8):</p>
-<textarea id="listado" placeholder="220324	7&#10;240092	6"></textarea>
+    <p class="preview-label">Pega el listado (formato: Carro TAB Tipo 6/7/8):</p>
+    <textarea id="listado" placeholder="220324	7&#10;240092	6"></textarea>
 
-<div class="button-row">
-<button onclick="generarHAScript()">Generar</button>
-<button onclick="copiarResultado()">Copiar</button>
-<button onclick="limpiarCampos()">Limpiar</button>
+    <div class="button-row">
+        <button onclick="generarHAScript()">Generar</button>
+        <button onclick="copiarResultado()">Copiar</button>
+        <button onclick="limpiarCampos()">Limpiar</button>
+    </div>
+
+    <h3>Resultado:</h3>
+    <textarea id="resultado" readonly></textarea>
 </div>
-
-<h3>Resultado:</h3>
-<textarea id="resultado" readonly></textarea>
 
 <script>
 function generarHAScript() {
@@ -46,13 +48,10 @@ function generarHAScript() {
 
         const siguienteBloque = index < pares.length - 1 ? `Carro_${pares[index+1].numeroCarro}_${pares[index+1].tipo}` : "";
 
-        // Bloque principal
         macro += `
 <!-- Bloque ${index+1} -->
 <screen name="Carro_${par.numeroCarro}_${par.tipo}" entryscreen="${index===0?'true':'false'}" exitscreen="false" transient="false">
-    <description>
-        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
-    </description>
+    <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
     <actions>
         ${index===0?'':'<input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />'}
         <input value="${par.numeroCarro}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
@@ -67,54 +66,32 @@ function generarHAScript() {
         <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
     </nextscreens>
 </screen>
-
 <!-- Screen de verificación 12/004 -->
 <screen name="Verificar12_004_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
-    <description>
-        <cursor row="12" col="4" optional="false" invertmatch="false" />
-    </description>
-    <actions>
-        <!-- Solo se ejecuta si el cursor está en 12/004 -->
-        <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-    </actions>
-    <nextscreens timeout="0">
-        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
-    </nextscreens>
+    <description><cursor row="12" col="4" optional="false" invertmatch="false" /></description>
+    <actions><input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+    <nextscreens timeout="0"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
 </screen>
-
-<!-- Screen de verificación 12/004 -->
+<!-- Screen de verificación 01/41 -->
 <screen name="Verificar01_41${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
-    <description>
-        <cursor row="1" col="41" optional="false" invertmatch="false" />
-    </description>
-    <actions>
-        <!-- Solo se ejecuta si el cursor está en 12/004 -->
-        <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-    </actions>
-    <nextscreens timeout="0">
-        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
-    </nextscreens>
+    <description><cursor row="1" col="41" optional="false" invertmatch="false" /></description>
+    <actions><input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+    <nextscreens timeout="0"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
 </screen>
-
 <!-- Continuar con proceso normal -->
 <screen name="ContinuarCarro_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
-    <description>
-        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
-    </description>
+    <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
     <actions>
-        <!-- Pagedown x4 -->
         <input value="[pagedn][pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="36800" row="13" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <!-- Pagedown x3 -->
         <input value="[pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="1" row="11" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="${val11}" row="11" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <!-- Pagedown x2 -->
         <input value="[pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="1" row="12" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
