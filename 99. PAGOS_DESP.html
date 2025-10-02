@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Generador HAScript Pagos</title>
+<link rel="stylesheet" href="macro-style.css">
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+textarea, button { display: block; margin-bottom: 15px; width: 100%; }
+textarea { height: 300px; }
+button { padding: 10px; }
+.botones { display: flex; gap: 10px; }
+</style>
+</head>
+<body>
+<h2>Generador de HAScript Pagos</h2>
+
+<label for="listado">Pega el listado (formato: Carro TAB Tipo 6/7/8):</label>
+<textarea id="listado" placeholder="220324	7&#10;240092	6"></textarea>
+
+<div class="botones">
+<button onclick="generarHAScript()">Generar</button>
+<button onclick="copiarResultado()">Copiar</button>
+<button onclick="limpiarCampos()">Limpiar</button>
+</div>
+
+<h3>Resultado:</h3>
+<textarea id="resultado" readonly></textarea>
+
+<script>
+function generarHAScript() {
+    const texto = document.getElementById('listado').value.trim();
+    const resultado = document.getElementById('resultado');
+    if (!texto) { alert("Por favor ingresa el listado."); return; }
+
+    const lineas = texto.split('\n');
+    const pares = [];
+
+    for (const linea of lineas) {
+        const match = linea.match(/^(\d+)\s+(\d+)$/);
+        if (match) { pares.push({ numeroCarro: match[1], tipo: match[2] }); }
+    }
+
+    if (pares.length === 0) { resultado.value = "No se encontraron pares válidos."; return; }
+
+    let macro = `<HAScript name="despacho" description="Flujo completo" timeout="50000" pausetime="2000" promptall="true" blockinput="true" author="burra" creationdate="Oct 02, 2025 12:00:00 PM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
+
+    pares.forEach((par, index) => {
+        let val11 = "", val12 = "";
+        if (par.tipo === "6") { val11 = "3150"; val12 = "1800"; }
+        if (par.tipo === "7") { val11 = "3675"; val12 = "2100"; }
+        if (par.tipo === "8") { val11 = "4200"; val12 = "2400"; }
+
+        const siguienteBloque = index < pares.length - 1 ? `Carro_${pares[index+1].numeroCarro}_${pares[index+1].tipo}` : "";
+
+        // Bloque principal
+        macro += `
+<!-- Bloque ${index+1} -->
+<screen name="Carro_${par.numeroCarro}_${par.tipo}" entryscreen="${index===0?'true':'false'}" exitscreen="false" transient="false">
+    <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        ${index===0?'':'<input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />'}
+        <input value="${par.numeroCarro}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[enter]" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="NOGASO" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="X" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="0">
+        <nextscreen name="Verificar12_004_${par.numeroCarro}" />
+        <nextscreen name="Verificar01_41${par.numeroCarro}" />
+        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
+    </nextscreens>
+</screen>
+
+<!-- Screen de verificación 12/004 -->
+<screen name="Verificar12_004_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
+    <description>
+        <cursor row="12" col="4" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <!-- Solo se ejecuta si el cursor está en 12/004 -->
+        <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="0">
+        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
+    </nextscreens>
+</screen>
+
+<!-- Screen de verificación 12/004 -->
+<screen name="Verificar01_41${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
+    <description>
+        <cursor row="1" col="41" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <!-- Solo se ejecuta si el cursor está en 12/004 -->
+        <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="0">
+        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
+    </nextscreens>
+</screen>
+
+<!-- Continuar con proceso normal -->
+<screen name="ContinuarCarro_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
+    <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <!-- Pagedown x4 -->
+        <input value="[pagedn][pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="36800" row="13" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <!-- Pagedown x3 -->
+        <input value="[pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="1" row="11" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="${val11}" row="11" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <!-- Pagedown x2 -->
+        <input value="[pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="1" row="12" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="${val12}" row="12" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="0">
+        ${siguienteBloque ? `<nextscreen name="${siguienteBloque}" />` : ''}
+    </nextscreens>
+</screen>
+`;
+    });
+
+    macro += `</HAScript>`;
+    resultado.value = macro;
+}
+
+function copiarResultado() {
+    const resultado = document.getElementById('resultado');
+    resultado.select();
+    document.execCommand('copy');
+    alert("HAScript copiado al portapapeles.");
+}
+
+function limpiarCampos() {
+    document.getElementById('listado').value = "";
+    document.getElementById('resultado').value = "";
+}
+</script>
+</body>
+</html>
