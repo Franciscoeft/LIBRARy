@@ -12,12 +12,12 @@
     
     <div class="info-box">
       <h3>¿Cómo funciona?</h3>
-      <p>Este generador crea un macro que procesa códigos en secuencia. Para cada código:</p>
+      <p>Este generador crea un macro que procesa códigos en secuencia. Para cada código</p>
       <ul>
-        <li>Ingresa el código del carro.</li>
-        <li>Ejecuta toda la secuencia (DEST, coordenadas, páginas, etc.).</li>
-        <li>Al finalizar hace F3 y pasa al siguiente código.</li>
-        <li>El último código termina el script normalmente.</li>
+        <li>Ingresa el código de el carro </li>
+        <li>Ejecuta toda la secuencia (DEST, coordenadas, páginas, etc.)</li>
+        <li>Al finalizar hace F3 y pasa al siguiente código</li>
+        <li>El último código termina el script normalmente</li>
       </ul>
     </div>
 
@@ -53,15 +53,15 @@
     function inputCodigo(codigo) {
       return `
         <input value="${codigo}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <boxselection type="SELECT" srow="7" scol="47" erow="7" ecol="52" />
-        <input value="[copy]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[copy]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <boxselection type="DESELECT" />
-        <input value="[paste]" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <input value="[enter]" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <input value="E" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-        <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[paste]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;E&apos;" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
       `;
     }
 
@@ -93,11 +93,11 @@
             <cursor row="13" col="49" optional="true" invertmatch="false" />
         </description>
         <actions>
-            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="Ecall" row="13" col="10" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="&apos;[enter]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pf5]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'Ecall'" row="13" col="10" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="20" col="48" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="100">
@@ -110,20 +110,19 @@
             <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
         </description>
         <actions>
-            <input value="[pageup][pageup][pageup]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[reset]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pageup][pageup][pageup]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="&apos;[reset]&apos;" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />            <input value="1" row="20" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="1" row="22" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pagedn]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="20" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="22" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pagedn]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="20" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="22" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pagedn]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="20" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="22" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="1" row="20" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="1" row="22" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="100">
             <nextscreen name="Finaliza_${idx}" />
@@ -137,8 +136,8 @@
             <numinputfields number="27" optional="true" invertmatch="false" />
         </description>
         <actions>
-            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
-            <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pf5]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="0">
             <nextscreen name="EsperaCursor1042_${idx}" />
@@ -151,7 +150,7 @@
             <cursor row="10" col="2" optional="false" invertmatch="false" />
         </description>
         <actions>
-            <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="1000">
             <nextscreen name="EsperaCursor1042_${idx}" />
@@ -168,7 +167,7 @@
             <cursor row="1" col="42" optional="true" invertmatch="false" />
         </description>
         <actions>
-            <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="1000">
             <nextscreen name="IngresaSiguienteCodigo_${nextIdx}" />
@@ -196,7 +195,7 @@
             <cursor row="1" col="42" optional="true" invertmatch="false" />
         </description>
         <actions>
-            <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+            <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
         <nextscreens timeout="0">
         </nextscreens>
@@ -226,6 +225,7 @@
         return;
       }
 
+      // Validar que todos los códigos sean de 6 dígitos
       const codigosInvalidos = codigos.filter(codigo => !isValidCode(codigo));
       if (codigosInvalidos.length > 0) {
         alert(`Los siguientes códigos no son válidos (deben ser 6 dígitos): ${codigosInvalidos.join(', ')}`);
@@ -238,9 +238,18 @@
         const isLast = index === codigos.length - 1;
         const isFirst = index === 0;
         
-        if (isFirst) result += createFirstScreenBlock(codigo, index + 1);
+        // Para el primer código, crear la pantalla inicial
+        if (isFirst) {
+          result += createFirstScreenBlock(codigo, index + 1);
+        }
+        
+        // Crear el bloque completo de procesamiento
         result += createScreenBlock(codigo, index + 1, !isLast);
-        if (!isLast) result += createTransitionBlock(codigos[index + 1], index + 1, index + 2);
+        
+        // Si no es el último, crear la transición al siguiente
+        if (!isLast) {
+          result += createTransitionBlock(codigos[index + 1], index + 1, index + 2);
+        }
       });
 
       result += finalScreen;
@@ -251,10 +260,12 @@
 
     document.getElementById('copyBtn').addEventListener('click', () => {
       const output = document.getElementById('output').textContent;
+      
       if (!output.trim()) {
         alert('¡No hay contenido para copiar! Primero genera un macro.');
         return;
       }
+
       navigator.clipboard.writeText(output).then(() => {
         alert('¡Macro copiado al portapapeles!');
       }).catch(() => {
@@ -269,3 +280,9 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
