@@ -59,6 +59,7 @@ function generarHAScript() {
         <input value="NOGASO" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="X" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
     </actions>
     <nextscreens timeout="0">
         <nextscreen name="Verificar12_004_${par.numeroCarro}" />
@@ -82,6 +83,7 @@ function generarHAScript() {
 <screen name="ContinuarCarro_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
     <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
     <actions>
+        <input value="[reset]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />      
         <input value="[pagedn][pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
