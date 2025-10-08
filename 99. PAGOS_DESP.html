@@ -38,7 +38,7 @@ function generarHAScript() {
 
     if (pares.length === 0) { resultado.value = "No se encontraron pares válidos."; return; }
 
-    let macro = `<HAScript name="despacho" description="Flujo completo" timeout="50000" pausetime="2000" promptall="true" blockinput="true" author="burra" creationdate="Oct 02, 2025 12:00:00 PM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
+    let macro = `<HAScript name="despacho" description="Flujo completo" timeout="30000" pausetime="200" promptall="true" blockinput="true" author="burra" creationdate="Oct 02, 2025 12:00:00 PM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
 
     pares.forEach((par, index) => {
         let val11 = "", val12 = "";
