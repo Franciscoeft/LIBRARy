@@ -61,7 +61,7 @@ function generarHAScript() {
         <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
     </actions>
-    <nextscreens timeout="0">
+    <nextscreens timeout="10">
         <nextscreen name="Verificar12_004_${par.numeroCarro}" />
         <nextscreen name="Verificar01_41${par.numeroCarro}" />
         <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
@@ -71,13 +71,13 @@ function generarHAScript() {
 <screen name="Verificar12_004_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
     <description><cursor row="12" col="4" optional="false" invertmatch="false" /></description>
     <actions><input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
-    <nextscreens timeout="0"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
+    <nextscreens timeout="10"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
 </screen>
 <!-- Screen de verificación 01/41 -->
 <screen name="Verificar01_41${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
     <description><cursor row="1" col="41" optional="false" invertmatch="false" /></description>
     <actions><input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
-    <nextscreens timeout="0"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
+    <nextscreens timeout="10"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
 </screen>
 <!-- Continuar con proceso normal -->
 <screen name="ContinuarCarro_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
@@ -101,7 +101,7 @@ function generarHAScript() {
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
     </actions>
-    <nextscreens timeout="100">
+    <nextscreens timeout="1000">
         ${siguienteBloque ? `<nextscreen name="${siguienteBloque}" />` : ''}
     </nextscreens>
 </screen>
