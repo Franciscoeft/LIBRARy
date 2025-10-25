@@ -74,7 +74,7 @@
         <actions>
             ${inputCodigo(codigo)}
         </actions>
-        <nextscreens timeout="300">
+        <nextscreens timeout="500">
             <nextscreen name="VerificaCoordenadas_${idx}" />
         </nextscreens>
     </screen>`;
@@ -99,7 +99,7 @@
             <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="1" row="20" col="48" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
-        <nextscreens timeout="2000">
+        <nextscreens timeout="2500">
             <nextscreen name="Poner1Paginas_${idx}" />
         </nextscreens>
     </screen>
@@ -126,7 +126,7 @@
             <input value="1" row="22" col="53" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
-        <nextscreens timeout="1500">
+        <nextscreens timeout="2000">
             <nextscreen name="Finaliza_${idx}" />
         </nextscreens>
     </screen>
@@ -141,7 +141,7 @@
             <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
             <input value="'[pf5]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
-        <nextscreens timeout="50">
+        <nextscreens timeout="500">
             <nextscreen name="EsperaCursor1042_${idx}" />
         </nextscreens>
     </screen>
@@ -154,7 +154,7 @@
         <actions>
             <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
-        <nextscreens timeout="800">
+        <nextscreens timeout="1000">
             <nextscreen name="EsperaCursor1042_${idx}" />
             <nextscreen name="${hasNext ? `PF3YSiguiente_${idx}` : 'FinDelScript'}" />
         </nextscreens>
@@ -171,7 +171,7 @@
         <actions>
             <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
-        <nextscreens timeout="800">
+        <nextscreens timeout="1200">
             <nextscreen name="IngresaSiguienteCodigo_${nextIdx}" />
         </nextscreens>
     </screen>
@@ -183,7 +183,7 @@
         <actions>
             ${inputCodigo(nextCodigo)}
         </actions>
-        <nextscreens timeout="2000">
+        <nextscreens timeout="2500">
             <nextscreen name="VerificaCoordenadas_${nextIdx}" />
         </nextscreens>
     </screen>`;
@@ -199,7 +199,7 @@
         <actions>
             <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
         </actions>
-        <nextscreens timeout="20">
+        <nextscreens timeout="500">
         </nextscreens>
     </screen>
 `;
@@ -282,6 +282,7 @@
   </script>
 </body>
 </html>
+
 
 
 
