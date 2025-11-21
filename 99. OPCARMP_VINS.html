@@ -46,7 +46,7 @@ function generarMacro() {
     </screen>
     <screen name="Screen2_${id}" entryscreen="false" exitscreen="false" transient="false">
       <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /><numfields number="163" optional="true" invertmatch="false" /><numinputfields number="4" optional="true" invertmatch="false" /></description>
-      <actions><input value="${vin}[up]${codigo}[down][down][down][down][down][down][down][down]080125[field+][enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
+      <actions><input value="${vin}[up]${codigo}[enter][down][down][down][down][down][down][down][down]080125[field+][enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
       <nextscreens timeout="0"><nextscreen name="Screen3_${id}" /></nextscreens>
     </screen>
     <screen name="Screen3_${id}" entryscreen="false" exitscreen="false" transient="false">
@@ -78,4 +78,5 @@ function generarMacro() {
 
 </body>
 </html>
+
 
