@@ -237,24 +237,59 @@ function generarHAScript() {
 
     if (pares.length === 0) { resultado.value = "No se encontraron pares válidos."; return; }
 
-    let macro = `<HAScript name="despacho" description="Flujo completo" timeout="20000" pausetime="300" promptall="true" blockinput="true" author="burra" creationdate="Oct 02, 2025 12:00:00 PM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
+let macro = `<HAScript name="despacho" description="Flujo completo" timeout="20000" pausetime="300" promptall="true" blockinput="true" author="burra" creationdate="Oct 02, 2025 12:00:00 PM" supressclearevents="false" usevars="false" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n`;
 
-    pares.forEach((par, index) => {
-        let val11 = "", val12 = "";
-        if (par.tipo === "6") { val11 = "3150"; val12 = "1800"; }
-        if (par.tipo === "7") { val11 = "3675"; val12 = "2100"; }
-        if (par.tipo === "8") { val11 = "4200"; val12 = "2400"; }
+pares.forEach((par, index) => {
+    let val11 = "", val12 = "";
+    if (par.tipo === "6") { val11 = "3150"; val12 = "1800"; }
+    if (par.tipo === "7") { val11 = "3675"; val12 = "2100"; }
+    if (par.tipo === "8") { val11 = "4200"; val12 = "2400"; }
 
-        const siguienteBloque = index < pares.length - 1 ? `Carro_${pares[index+1].numeroCarro}_${pares[index+1].tipo}` : "";
+    // Encadenar al inicio del siguiente carro para mantener el patrón completo
+    const siguienteBloque = index < pares.length - 1
+        ? `InicioCarro_${pares[index+1].numeroCarro}_${pares[index+1].tipo}`
+        : "";
 
-        macro += `
-<!-- Bloque ${index+1} -->
-<screen name="Carro_${par.numeroCarro}_${par.tipo}" entryscreen="${index===0?'true':'false'}" exitscreen="false" transient="false">
-    <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
+    macro += `
+<!-- ====== Bloque ${index+1} ====== -->
+
+<!-- ====== BLOQUE INICIAL (SEPARADO) ====== -->
+<screen name="InicioCarro_${par.numeroCarro}_${par.tipo}" entryscreen="${index===0?'true':'false'}" exitscreen="false" transient="false">
+    <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+    </description>
     <actions>
         ${index===0?'':'<input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />'}
         <input value="${par.numeroCarro}" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[enter]" row="1" col="8" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="10">
+        <!-- Después del ENTER, verificar pantalla 01 -->
+        <nextscreen name="Verificar01_${par.numeroCarro}" />
+        <!-- Fallback por si el host salta directo -->
+        <nextscreen name="Carro_${par.numeroCarro}_${par.tipo}" />
+    </nextscreens>
+</screen>
+
+<!-- ====== VERIFICACIÓN INMEDIATA DESPUÉS DEL ENTER ====== -->
+<screen name="Verificar01_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
+    <description>
+        <cursor row="5" col="2" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="10">
+        <nextscreen name="Carro_${par.numeroCarro}_${par.tipo}" />
+    </nextscreens>
+</screen>
+
+<!-- ====== PROCESO DEL CARRO (NOGASO + VERIFICACIONES + CONTINUACIÓN) ====== -->
+<screen name="Carro_${par.numeroCarro}_${par.tipo}" entryscreen="false" exitscreen="false" transient="false">
+    <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+    </description>
+    <actions>
         <input value="NOGASO" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="X" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
@@ -266,21 +301,52 @@ function generarHAScript() {
         <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
     </nextscreens>
 </screen>
-<!-- Screen de verificación 12/004 -->
+
+<!-- ====== VERIFICACIÓN 12/004 ====== -->
 <screen name="Verificar12_004_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
-    <description><cursor row="12" col="4" optional="false" invertmatch="false" /></description>
-    <actions><input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
-    <nextscreens timeout="10"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
+    <description>
+        <cursor row="12" col="4" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="10">
+        <nextscreen name="Verificar12_0004_${par.numeroCarro}" />
+        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
+    </nextscreens>
 </screen>
-<!-- Screen de verificación 01/41 -->
+
+<!-- ====== VERIFICACIÓN 12/00004 ====== -->
+<screen name="Verificar12_0004_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
+    <description>
+        <cursor row="12" col="4" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="10">
+        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
+    </nextscreens>
+</screen>
+
+<!-- ====== VERIFICACIÓN 01/41 ====== -->
 <screen name="Verificar01_41${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
-    <description><cursor row="1" col="41" optional="false" invertmatch="false" /></description>
-    <actions><input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" /></actions>
-    <nextscreens timeout="10"><nextscreen name="ContinuarCarro_${par.numeroCarro}" /></nextscreens>
+    <description>
+        <cursor row="1" col="41" optional="false" invertmatch="false" />
+    </description>
+    <actions>
+        <input value="[enter]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+    </actions>
+    <nextscreens timeout="10">
+        <nextscreen name="ContinuarCarro_${par.numeroCarro}" />
+    </nextscreens>
 </screen>
-<!-- Continuar con proceso normal -->
+
+<!-- ====== CONTINUACIÓN NORMAL DEL PROCESO ====== -->
 <screen name="ContinuarCarro_${par.numeroCarro}" entryscreen="false" exitscreen="false" transient="false">
-    <description><oia status="NOTINHIBITED" optional="false" invertmatch="false" /></description>
+    <description>
+        <oia status="NOTINHIBITED" optional="false" invertmatch="false" />
+    </description>
     <actions>
         ${generarAcciones(val11, val12, dobleOperador)}
     </actions>
@@ -289,12 +355,11 @@ function generarHAScript() {
     </nextscreens>
 </screen>
 `;
-    });
+});
 
-    macro += `</HAScript>`;
-    resultado.value = macro;
+macro += `</HAScript>`;
+resultado.value = macro;
 }
-
 function generarAcciones(val11, val12, dobleOperador) {
     if (!dobleOperador) {
         // Macro original para un operador
