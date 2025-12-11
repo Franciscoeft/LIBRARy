@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Generador de HAScript por Bloques</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #f3f4f6 0%, #e0e7ef 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .container {
+      background: #fff;
+      border-radius: 50px;
+      box-shadow: 0 4px 24px #1e293b11;
+      padding: 2.2rem 2.5rem 2.2rem 2rem;
+      margin: 2.5rem 0;
+      max-width: 1920px;
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    h2, h3 {
+      color: #1e293b;
+      margin-top: 1.2rem;
+      margin-bottom: 0.7rem;
+      font-size: 1.08rem;
+      font-weight: 500;
+      text-align: left;
+    }
+    p {
+      color: #374151;
+      font-size: 1.08rem;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+    textarea, input, select {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      font-size: 1rem;
+      font-family: 'Segoe UI Mono', 'Consolas', monospace;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      transition: border 0.2s;
+      box-sizing: border-box;
+    }
+    textarea:focus, input:focus, select:focus {
+      border: 1.5px solid #2563eb;
+      outline: none;
+      background: #fff;
+    }
+    .button-row {
+      display: flex;
+      gap: 0.7rem;
+      margin-bottom: 0.2rem;
+    }
+    button, .button {
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg, #2563eb 60%, #1e40af 100%);
+      color: #fff;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #2563eb22;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    button:hover, .button:hover {
+      background: linear-gradient(90deg, #1e40af 60%, #2563eb 100%);
+      color: #e0e7ef;
+      box-shadow: 0 4px 16px #2563eb33;
+    }
+    .preview-label {
+      font-size: 1.08rem;
+      color: #334155;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    pre, #output {
+      background: #f4f7fa;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Segoe UI Mono', 'Consolas', monospace;
+      font-size: 0.98rem;
+      color: #1e293b;
+      min-height: 80px;
+      box-shadow: 0 1px 4px #1e293b0a;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      border: none;
+      margin-bottom: 0.5rem;
+    }
+    a#downloadLink, .download-link {
+      display: none;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      background: #2563eb;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px #2563eb22;
+      transition: background 0.2s, color 0.2s;
+    }
+    a#downloadLink:hover, .download-link:hover {
+      background: linear-gradient(90deg, #1e40af 60%, #2563eb 100%);
+      color: #e0e7ef;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: #e5e7eb;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 6px;
+    }
+    ::selection {
+      background: #2563eb33;
+    }
+    
+    /* Estilos específicos del generador */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      background: #fafbfc;
+    }
+    .two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+    label {
+      display: block;
+      font-size: 0.95rem;
+      color: #475569;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+    .small {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    details {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #334155;
+      padding: 0.3rem;
+    }
+    summary:hover {
+      color: #2563eb;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 1.5rem 0;
+    }
+    textarea#codes {
+      min-height: 160px;
+    }
+    textarea#output {
+      min-height: 400px;
+    }
+    code {
+      background: #e0e7ff;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'Segoe UI Mono', 'Consolas', monospace;
+      font-size: 0.9em;
+    }
+    
+    @media (max-width: 900px) {
+      .container {
+        max-width: 98vw;
+        padding: 1.2rem 0.7rem;
+        margin: 1.2rem 0.2rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .container {
+        max-width: 100vw;
+        padding: 0.5rem 0.1rem;
+        margin: 0.5rem 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      h1 { font-size: 1rem; }
+      button, .button { font-size: 0.95rem; padding: 0.5rem 0.7rem; }
+      pre, #output { font-size: 0.92rem; }
+      .two {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Generador de HAScript por bloques</h1>
+    <p>Ingresa una lista de <b>códigos</b> (uno por línea). El generador construye un <code>HAScript</code> que ejecuta la misma secuencia para cada código y encadena al siguiente, terminando en <code>FinDelScript</code>.</p>
+
+    <div class="grid">
+      <div class="card">
+        <label for="codes"><b>Códigos (uno por línea)</b></label>
+        <textarea id="codes" placeholder="Ejemplo:
+240117
+220018
+211694
+210357
+212189
+250984
+211994"></textarea>
+
+        <div class="two">
+          <div>
+            <label for="scriptName">Nombre del HAScript</label>
+            <input id="scriptName" value="POR_AUTO_BLOCKS" />
+          </div>
+          <div>
+            <label for="author">Autor</label>
+            <input id="author" value="generator" />
+          </div>
+        </div>
+
+        <div class="two">
+          <div>
+            <label for="timeout">Timeout (ms)</label>
+            <input id="timeout" type="number" value="3000" />
+          </div>
+          <div>
+            <label for="pausetime">Pause global (ms)</label>
+            <input id="pausetime" type="number" value="200" />
+          </div>
+        </div>
+
+        <details>
+          <summary>Posiciones constantes (avanzado)</summary>
+          <div class="two">
+            <div>
+              <label for="codeRow">Fila código</label>
+              <input id="codeRow" type="number" value="1" />
+            </div>
+            <div>
+              <label for="codeCol">Columna código</label>
+              <input id="codeCol" type="number" value="8" />
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label for="nogasoRow">Fila NOGASO</label>
+              <input id="nogasoRow" type="number" value="1" />
+            </div>
+            <div>
+              <label for="nogasoCol">Columna NOGASO</label>
+              <input id="nogasoCol" type="number" value="42" />
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label for="l1Row">Fila L (1a vez)</label>
+              <input id="l1Row" type="number" value="1" />
+            </div>
+            <div>
+              <label for="l1Col">Columna L (1a vez)</label>
+              <input id="l1Col" type="number" value="68" />
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label for="l2Row">Fila L (13,10)</label>
+              <input id="l2Row" type="number" value="13" />
+            </div>
+            <div>
+              <label for="l2Col">Columna L (13,10)</label>
+              <input id="l2Col" type="number" value="10" />
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label for="cursorRow">Cursor de salida - fila</label>
+              <input id="cursorRow" type="number" value="14" />
+            </div>
+            <div>
+              <label for="cursorCol">Cursor de salida - col</label>
+              <input id="cursorCol" type="number" value="16" />
+            </div>
+          </div>
+          <p class="small">Usa indexación <b>1-based</b> (común), deja estos valores tal cual.</p>
+        </details>
+
+        <div class="button-row" style="margin-top:1rem">
+          <button id="generate">Generar HAScript</button>
+          <button id="copy">Copiar</button>
+          <button id="download">Descargar .xml</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <label for="output"><b>Salida (HAScript XML)</b></label>
+        <textarea id="output" placeholder="Aquí aparecerá el XML generado..." readonly></textarea>
+        <p class="small">Revisa que las teclas (PF3, PF5, Enter) y coordenadas coincidan con tu aplicación host.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const qs = (sel) => document.querySelector(sel);
+
+    function escXml(s){
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;');
+    }
+
+    function blockXml(code, opts, isFirst, isLast, nextCode){
+      const C = escXml(code);
+      const next = nextCode ? `Bloque_${escXml(nextCode)}_Inicio` : 'FinDelScript';
+
+      const oia = '<oia status="NOTINHIBITED" optional="false" invertmatch="false"/>';
+
+      return `
+  <!-- ====== BLOQUE: ${C} ====== -->
+  <screen name="Bloque_${C}_Inicio" entryscreen="${isFirst?'true':'false'}" exitscreen="false" transient="false">
+    <description>${oia}</description>
+    <actions>
+      <input value="${C}" row="${opts.codeRow}" col="${opts.codeCol}" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'NOGASO'" row="${opts.nogasoRow}" col="${opts.nogasoCol}" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'L'" row="${opts.l1Row}" col="${opts.l1Col}" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+    </actions>
+    <nextscreens timeout="1500">
+      <nextscreen name="Bloque_${C}_EsperaGeneral"/>
+    </nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_EsperaGeneral" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}</description>
+    <actions><pause value="100"/></actions>
+    <nextscreens timeout="200">
+      <nextscreen name="Bloque_${C}_VerificaCursor12_4"/>
+      <nextscreen name="Bloque_${C}_Coordenadas"/>
+    </nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_VerificaCursor12_4" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}<cursor row="12" col="4" optional="false" invertmatch="false"/></description>
+    <actions>
+      <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <pause value="100"/>
+    </actions>
+    <nextscreens timeout="800">
+      <nextscreen name="Bloque_${C}_VerificaCursor12_4"/>
+      <nextscreen name="Bloque_${C}_Coordenadas"/>
+    </nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_Coordenadas" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}</description>
+    <actions>
+      <pause value="50"/>
+      <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <pause value="50"/>
+      <input value="'L'" row="${opts.l2Row}" col="${opts.l2Col}" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'[enter]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <input value="'[pf5]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      <pause value="50"/>
+    </actions>
+    <nextscreens timeout="2000">
+      <nextscreen name="Bloque_${C}_Poner1Paginas"/>
+    </nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_Poner1Paginas" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}</description>
+    <actions>
+      <pause value="70"/>
+      <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+      </actions>
+    <nextscreens timeout="1500"><nextscreen name="Bloque_${C}_Finaliza"/></nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_Finaliza" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}</description>
+    <actions><pause value="70"/><input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>
+    <nextscreens timeout="1500">
+      <nextscreen name="Bloque_${C}_MientrasCursor1416"/>
+      <nextscreen name="Bloque_${C}_DespuesDeSalir"/>
+    </nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_MientrasCursor1416" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}<cursor row="${opts.cursorRow}" col="${opts.cursorCol}" optional="false" invertmatch="false"/></description>
+    <actions><input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>
+    <nextscreens timeout="2000">
+      <nextscreen name="Bloque_${C}_MientrasCursor1416"/>
+      <nextscreen name="Bloque_${C}_DespuesDeSalir"/>
+    </nextscreens>
+  </screen>
+
+  <screen name="Bloque_${C}_DespuesDeSalir" entryscreen="false" exitscreen="false" transient="false">
+    <description>${oia}<cursor row="${opts.cursorRow}" col="${opts.cursorCol}" optional="false" invertmatch="true"/></description>
+    <actions>
+      <pause value="80"/>
+      <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+    </actions>
+    <nextscreens timeout="500"><nextscreen name="${next}"/></nextscreens>
+  </screen>
+`;
+    }
+
+    function generate(){
+      const codesText = qs('#codes').value.trim();
+      if(!codesText){ alert('Ingresa al menos un código.'); return; }
+      const codes = codesText.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+      const opts = {
+        codeRow: +qs('#codeRow').value || 1,
+        codeCol: +qs('#codeCol').value || 8,
+        nogasoRow: +qs('#nogasoRow').value || 1,
+        nogasoCol: +qs('#nogasoCol').value || 42,
+        l1Row: +qs('#l1Row').value || 1,
+        l1Col: +qs('#l1Col').value || 68,
+        l2Row: +qs('#l2Row').value || 13,
+        l2Col: +qs('#l2Col').value || 10,
+        cursorRow: +qs('#cursorRow').value || 14,
+        cursorCol: +qs('#cursorCol').value || 16,
+      };
+
+      const scriptName = escXml(qs('#scriptName').value.trim() || 'POR_AUTO_BLOCKS');
+      const author = escXml(qs('#author').value.trim() || 'generator');
+      const timeout = +qs('#timeout').value || 3000;
+      const pausetime = +qs('#pausetime').value || 200;
+      const creationdate = escXml(new Date().toLocaleString());
+
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`+
+  `<HAScript name="${scriptName}" description="Secuencia automatizada por bloques" timeout="${timeout}" pausetime="${pausetime}" promptall="true" blockinput="true" author="${author}" creationdate="${creationdate}" supressclearevents="false" usevars="true" ignorepauseforenhancedtn="true" delayifnotenhancedtn="0" ignorepausetimeforenhancedtn="true" continueontimeout="false">\n\n`;
+
+      codes.forEach((code, i) => {
+        const nextCode = i < codes.length - 1 ? codes[i+1] : null;
+        xml += blockXml(code, opts, i === 0, i === codes.length - 1, nextCode);
+      });
+
+      xml += `
+  <screen name="FinDelScript" entryscreen="false" exitscreen="true" transient="false">
+    <description><oia status="NOTINHIBITED" optional="true" invertmatch="false"/></description>
+    <actions><pause value="100"/></actions>
+    <nextscreens timeout="300"/>
+  </screen>
+</HAScript>`;
+
+      qs('#output').value = xml;
+    }
+
+    function copyOut(){
+      const txt = qs('#output').value;
+      if(!txt){ alert('No hay XML generado para copiar.'); return; }
+      navigator.clipboard.writeText(txt).then(() => alert('XML copiado al portapapeles.'));
+    }
+
+    function downloadXml(){
+      const txt = qs('#output').value;
+      if(!txt){ alert('Genera el XML primero.'); return; }
+      const blob = new Blob([txt], {type: 'application/xml'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const name = (qs('#scriptName').value.trim() || 'POR_AUTO_BLOCKS') + '.xml';
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 250);
+    }
+
+    qs('#generate').addEventListener('click', generate);
+    qs('#copy').addEventListener('click', copyOut);
+    qs('#download').addEventListener('click', downloadXml);
+
+  })();
+  </script>
+</body>
+</html>
