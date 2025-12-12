@@ -366,7 +366,7 @@
 
   <screen name="Bloque_${C}_EsperaGeneral" entryscreen="false" exitscreen="false" transient="false">
     <description>${oia}</description>
-    <actions><pause value="100"/></actions>
+    <actions><pause value="60"/></actions>
     <nextscreens timeout="200">
       <nextscreen name="Bloque_${C}_VerificaCursor12_4"/>
       <nextscreen name="Bloque_${C}_Coordenadas"/>
@@ -412,7 +412,10 @@
 
   <screen name="Bloque_${C}_Finaliza" entryscreen="false" exitscreen="false" transient="false">
     <description>${oia}</description>
-    <actions><pause value="70"/><input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>
+    <actions>
+    <pause value="70"/>
+    <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+    </actions>
     <nextscreens timeout="1500">
       <nextscreen name="Bloque_${C}_MientrasCursor1416"/>
       <nextscreen name="Bloque_${C}_DespuesDeSalir"/>
@@ -421,13 +424,16 @@
 
   <screen name="Bloque_${C}_MientrasCursor1416" entryscreen="false" exitscreen="false" transient="false">
     <description>${oia}<cursor row="${opts.cursorRow}" col="${opts.cursorCol}" optional="false" invertmatch="false"/></description>
-    <actions><input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/></actions>
+    <actions>
+    <pause value="40"/>
+    <input value="'[pf3]'" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false"/>
+    </actions>
     <nextscreens timeout="2000">
       <nextscreen name="Bloque_${C}_MientrasCursor1416"/>
       <nextscreen name="Bloque_${C}_DespuesDeSalir"/>
     </nextscreens>
   </screen>
-
+    
   <screen name="Bloque_${C}_DespuesDeSalir" entryscreen="false" exitscreen="false" transient="false">
     <description>${oia}<cursor row="${opts.cursorRow}" col="${opts.cursorCol}" optional="false" invertmatch="true"/></description>
     <actions>
@@ -510,3 +516,4 @@
 </body>
 
 </html>
+
