@@ -291,8 +291,11 @@ pares.forEach((par, index) => {
     </description>
     <actions>
         <input value="NOGASO" row="1" col="42" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="X" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[enter]" row="1" col="68" movecursor="true" xlatehostkeys="true" encrypted="false" />
     </actions>
     <nextscreens timeout="10">
@@ -308,6 +311,7 @@ pares.forEach((par, index) => {
         <cursor row="12" col="4" optional="false" invertmatch="false" />
     </description>
     <actions>
+        <pause value="50"/>
         <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
     </actions>
     <nextscreens timeout="10">
@@ -322,6 +326,7 @@ pares.forEach((par, index) => {
         <cursor row="12" col="4" optional="false" invertmatch="false" />
     </description>
     <actions>
+        <pause value="50"/>
         <input value="[pf3]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
     </actions>
     <nextscreens timeout="10">
@@ -365,47 +370,69 @@ function generarAcciones(val11, val12, dobleOperador) {
         // Macro original para un operador
         return `<input value="[reset]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />      
         <input value="[pagedn][pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="36800" row="13" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="11" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="${val11}" row="11" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="${val12}" row="13" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />`;
     } else {
         // Macro para doble operador
         return `<input value="[reset]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />      
         <input value="[pagedn][pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="36800" row="13" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[pagedn][pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="11" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="${val11}" row="11" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="12" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="${val11}" row="12" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[pagedn][pagedn]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="13" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="${val12}" row="13" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="1" row="14" col="21" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="${val12}" row="14" col="28" movecursor="true" xlatehostkeys="true" encrypted="false" />
         <input value="[field+]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />
+        <pause value="50"/>
         <input value="[pf5]" row="0" col="0" movecursor="true" xlatehostkeys="true" encrypted="false" />`;
     }
 }
